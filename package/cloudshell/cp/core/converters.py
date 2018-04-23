@@ -58,11 +58,13 @@ class DriverRequestParser:
     def _convert_action(self, source, result):
 
         for key, value in source.items():
+
             if (isinstance(value, dict)):
                 created = self._create_by_type(value)
+                self.handle_deployemnt_custom_model(created, value)
                 self._set_value(result, key, created)
                 self._convert_action(value, getattr(result, key))
-            elif isinstance(value, (list)):
+            elif (isinstance(value, (list)) and not self.try_convert_to_attributes_map(value, result, key)):
                     created_arr = []
                     self._set_value(result, key, created_arr)
 
@@ -77,6 +79,39 @@ class DriverRequestParser:
             else:
                 self._set_value(result, key, value)
 
+
+
+    def handle_deployemnt_custom_model(self, result, item):
+
+        if item.get('type') != 'deployAppDeploymentInfo':
+            return
+
+        atts = item.get('attributes')
+
+        if not atts:
+            return
+
+        deployment_model_name = item.get('deploymentPath')
+
+        model_class = self.models_classes.get(deployment_model_name)
+
+        if not model_class:
+            return
+
+        result.customModel = model_class(convert_attributes_list_to_map(atts))
+
+    def is_attribute(self, item):
+        return  set(('attributeName','attributeValue')).issubset(item)
+
+    def try_convert_to_attributes_map(self, arr, result, key):
+
+        # if not All objects looks like attribute
+        if not all(self.is_attribute(item) for item in arr):
+            return False
+
+        self._set_value(result, key, convert_attributes_list_to_map(arr))
+
+        return True
 
     def _set_value(self, target, name, value):
 

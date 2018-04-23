@@ -222,7 +222,7 @@ class DeployAppDeploymentInfo(RequestObjectBase):
         RequestObjectBase.__init__(self)
         self.deploymentPath = ''
         self.attributes = None
-        self.attributesMap = {}
+        self.customModel = None
 
 
 class AppResourceInfo(RequestObjectBase):

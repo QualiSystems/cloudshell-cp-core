@@ -27,3 +27,16 @@ def get_class( kls ):
 
 def first_letter_to_upper(str):
     return str[:1].upper() + str[1:]
+
+def to_snake_case(str):
+    return  str.lower().replace(' ','_' )
+
+def convert_attributes_list_to_map(attributes):
+
+    attributes_map = {}
+
+    # so we shall convert it to attributes map{key : attribute name,value : attribute value }
+    for item in attributes:
+        attributes_map[item.get('attributeName')] = item.get('attributeValue')
+
+    return attributes_map
