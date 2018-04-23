@@ -26,7 +26,6 @@ class ConnectivityActionBase(RequestActionBase):
         RequestActionBase.__init__(self)
         self.actionTarget = None
         self.customActionAttributes = []
-        self.customActionAttributesMap = {}
 
 class PrepareSubnet(ConnectivityActionBase):
     def __init__(self):
@@ -49,7 +48,6 @@ class RemoveVlan(ConnectivityActionBase):
         self.connectionId = ''
         self.connectionParams = None
         self.connectorAttributes = []
-        self.connectorAttributesMap = {}
 
 class SetVlan(ConnectivityActionBase):
     def __init__(self):
@@ -57,7 +55,6 @@ class SetVlan(ConnectivityActionBase):
         self.connectionId = ''
         self.connectionParams = None
         self.connectorAttributes = []
-        self.connectorAttributesMap = {}
 
 class ConnectSubnet(ConnectivityActionBase):
     def __init__(self):
@@ -70,7 +67,6 @@ class SetVlanParameter (RequestObjectBase):
         self.vlanId = ''
         self.mode = 0
         self.vlanServiceAttributes = []
-        self.vlanServiceAttributesMap = {}
 
 class ConnectionParamsBase(RequestObjectBase):
     def __init__(self):
@@ -78,7 +74,6 @@ class ConnectionParamsBase(RequestObjectBase):
         self.cidr = ''  # type: str
         self.subnetServiceAttributes = []  # type: list[NetworkActionAttribute]
         self.custom_attributes = []  # type: list[NetworkActionAttribute]
-        self.custom_attributesMap = {}
 
 
 class SubnetConnectionParams(ConnectionParamsBase):
@@ -104,7 +99,6 @@ class PrepareNetwork(RequestActionBase):
         RequestActionBase.__init__(self)
         self.actionId = ''
         self.customActionAttributes = []
-        self.customActionAttributesMap = {}
         self.connectionParams = None
 
 
@@ -229,7 +223,6 @@ class AppResourceInfo(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
         self.attributes = None
-        self.attributesMap = {}
 
 
 class Attributes(RequestObjectBase):
