@@ -1,17 +1,6 @@
 from cloudshell.cp.core.utils import  *
 from cloudshell.cp.core.models import *
 
-class LinkedCloneModel(object):
-
-    __deploymentModel__ = "linkedClone"
-
-    def __init__(self, attributes):
-        """
-        :param dict attributes:
-        """
-        self.a = dict['a']  # type: str
-        self.b = (dict['b'])  # type: bool
-
 class DriverRequestParser:
 
     def __init__(self):
@@ -64,7 +53,11 @@ class DriverRequestParser:
                 self.handle_deployemnt_custom_model(created, value)
                 self._set_value(result, key, created)
                 self._convert_action(value, getattr(result, key))
-            elif (isinstance(value, (list)) and not self.try_convert_to_attributes_map(value, result, key)):
+            elif (isinstance(value, (list))):
+
+                    if(self.try_convert_to_attributes_map(value, result, key)):
+                        continue
+
                     created_arr = []
                     self._set_value(result, key, created_arr)
 
