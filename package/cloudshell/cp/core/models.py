@@ -1,131 +1,149 @@
-import json
-import sys
 
 
-VNIC_NAME_ATTRIBUTE = "Vnic Name"
+#region base
 
 class RequestObjectBase(object):
     def __init__(self):
         pass
-        # self.type = self.__class__.__name__
-        # self.type = ''
 
 class RequestActionBase(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
-        self.actionId = ''
+        self.actionId = '' # type: str
 
 class ActionTarget(RequestObjectBase):
     def __init__(self):
+        """
+        :type fullAddress:  str
+        :type fullName:  str
+        """
         RequestObjectBase.__init__(self)
-        self.fullAddress = ''
-        self.fullName = ''
+        self.fullAddress = '' # type: str
+        self.fullName = ''    # type: str
 
 class ConnectivityActionBase(RequestActionBase):
     def __init__(self):
         RequestActionBase.__init__(self)
-        self.actionTarget = None
-        self.customActionAttributes = []
+        self.actionTarget = None           # type: ActionTarget
+        self.customActionAttributes = None # type: dict
+
+class ConnectivityVlanActionBase(ConnectivityActionBase):
+    def __init__(self):
+        ConnectivityActionBase.__init__(self)
+        self.connectionId = ''          # type: str
+        self.connectionParams = None    # type: SetVlanParameter
+        self.connectorAttributes = None # type: dict
+
+#endregion
+
+#region DeployApp
+
+class DeployApp(RequestActionBase):
+    def __init__(self):
+        RequestActionBase.__init__(self)
+        self.actionParams= None # type: DeployAppParams
+
+
+class DeployAppParams(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.appName = ''       # type: str
+        self.deployment = None  # type: DeployAppDeploymentInfo
+        self.appResource = None # type: AppResourceInfo
+
+
+class DeployAppDeploymentInfo(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.deploymentPath = '' # type: str
+        self.attributes = None   # type: dict
+        self.customModel = None  # type: object
+
+class AppResourceInfo(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.attributes = None   # type: dict
+
+#endregion
+
+#region PrepareSubnet
 
 class PrepareSubnet(ConnectivityActionBase):
     def __init__(self):
         ConnectivityActionBase.__init__(self)
-        self.connectionParams = None
+        self.actionParams = None # type: PrepareSubnetParams
 
-class PrepareNetwork(ConnectivityActionBase):
+class PrepareSubnetParams(RequestObjectBase):
     def __init__(self):
-        ConnectivityActionBase.__init__(self)
-        self.connectionParams = None
+        RequestObjectBase.__init__(self)
+        self.cidr = ''                    # type: str
+        self.is_public = False            # type: bool
+        self.alias = ''                   # type: str
+        self.attributes = None            # type: dict
+
+#endregion
+
+#region CleanupNetwork
 
 class CleanupNetwork(ConnectivityActionBase):
     def __init__(self):
         ConnectivityActionBase.__init__(self)
-        self.connectionParams = None
 
-class RemoveVlan(ConnectivityActionBase):
-    def __init__(self):
-        ConnectivityActionBase.__init__(self)
-        self.connectionId = ''
-        self.connectionParams = None
-        self.connectorAttributes = []
+#endregion
 
-class SetVlan(ConnectivityActionBase):
-    def __init__(self):
-        ConnectivityActionBase.__init__(self)
-        self.connectionId = ''
-        self.connectionParams = None
-        self.connectorAttributes = []
-
-class ConnectSubnet(ConnectivityActionBase):
-    def __init__(self):
-        ConnectivityActionBase.__init__(self)
-        self.connectionParams = None
+#region Vlan
 
 class SetVlanParameter (RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
-        self.vlanId = ''
-        self.mode = 0
-        self.vlanServiceAttributes = []
+        self.vlanId = ''                  # type: str
+        self.mode = 0                     # type: int
+        self.vlanServiceAttributes = None # type: dict
 
-class ConnectionParamsBase(RequestObjectBase):
+class RemoveVlan(ConnectivityVlanActionBase):
+    def __init__(self):
+        ConnectivityVlanActionBase.__init__(self)
+
+class SetVlan(ConnectivityVlanActionBase):
+    def __init__(self):
+        ConnectivityVlanActionBase.__init__(self)
+
+#endregion
+
+#region ConnectSubnet
+
+class ConnectSubnet(ConnectivityActionBase):
+    def __init__(self):
+        ConnectivityActionBase.__init__(self)
+        self.actionParams = None # type: ConnectToSubnetParams
+
+class ConnectToSubnetParams(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.cidr = ''                      # type: str
+        self.subnet_id = ''                 # type: str
+        self.is_public = False              # type: bool
+        self.subnetServiceAttributes = None # type: dict
+        self.vnicName = ''                  # type: str
+
+#endregion
+
+#region PrepareCloudInfra
+
+class PrepareCloudInfra(ConnectivityActionBase):
+    def __init__(self):
+        ConnectivityActionBase.__init__(self)
+        self.actionParams = None       # type: PrepareCloudInfraParams
+
+
+class PrepareCloudInfraParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
         self.cidr = ''  # type: str
-        self.subnetServiceAttributes = []  # type: list[NetworkActionAttribute]
-        self.custom_attributes = []  # type: list[NetworkActionAttribute]
 
+#endregion
 
-class SubnetConnectionParams(ConnectionParamsBase):
-    def __init__(self):
-        ConnectionParamsBase.__init__(self)
-        self.subnet_id = ''
-
-class PrepareSubnetParams(ConnectionParamsBase):
-    def __init__(self, cidr=None, alias='', is_public=True):
-        """
-        :param str cidr:
-        :param str alias:
-        :param bool is_public:
-        """
-        ConnectionParamsBase.__init__(self)
-        self.cidr = cidr
-        self.is_public = is_public
-        self.alias = alias
-
-
-class PrepareNetwork(RequestActionBase):
-    def __init__(self):
-        RequestActionBase.__init__(self)
-        self.actionId = ''
-        self.customActionAttributes = []
-        self.connectionParams = None
-
-
-class PrepareNetworkParams(ConnectionParamsBase):
-    def __init__(self):
-        ConnectionParamsBase.__init__(self)
-        del self.subnetServiceAttributes
-
-
-class NetworkActionAttribute(RequestObjectBase):
-    def __init__(self):
-        RequestObjectBase.__init__(self)
-        self.name = ''
-        self.value = ''
-
-
-class NetworkAction(RequestObjectBase):
-    def __init__(self, id=None, type=None, connection_params=None):
-        """
-        :param str id:
-        :param str type:
-        :param ConnectionParamsBase connection_params:
-        """
-        RequestObjectBase.__init__(self)
-        self.id = id or ''
-        self.type = type or ''
-        self.connection_params = connection_params
+#region actions results
 
 class DeployNetworkingResultModel(object):
     def __init__(self, action_id):
@@ -146,11 +164,9 @@ class ConnectivityActionResult(object):
         self.errorMessage = ''
 
 
-class PrepareNetworkActionResult(ConnectivityActionResult):
+class PrepareCloudInfraResult(ConnectivityActionResult):
     def __init__(self):
         ConnectivityActionResult.__init__(self)
-        self.vpcId = ''
-        self.securityGroupId = ''
         self.type = 'PrepareNetwork'
 
 
@@ -177,69 +193,18 @@ class SetAppSecurityGroupActionResult(object):
         self.success = True
         self.error = ''
 
-    def convert_to_json(self):
-        result = {'appName': self.appName, 'error': self.error, 'success': self.success}
-        return json.dumps(result)
-
-    @staticmethod
-    def to_json(results):
-        if not results:
-            return
-
-        return json.dumps([r.__dict__ for r in results])
-
-
-class DeployApp(RequestActionBase):
-    def __init__(self):
-        """
-                :param str id:
-                :param str type:
-                :param actionParams action_params:
-                """
-        RequestActionBase.__init__(self)
-        self.id =  ''
-        self.type = ''
-        self.actionParams= None
+    #
+    # def convert_to_json(self):
+    #     result = {'appName': self.appName, 'error': self.error, 'success': self.success}
+    #     return json.dumps(result)
+    #
+    # @staticmethod
+    # def to_json(results):
+    #     if not results:
+    #         return
+    #
+    #     return json.dumps([r.__dict__ for r in results])
 
 
 
-class DeployAppParams(RequestObjectBase):
-    def __init__(self):
-        RequestObjectBase.__init__(self)
-        self.appName = ''
-        self.deployment = None
-        self.appResource = None
-
-
-class DeployAppDeploymentInfo(RequestObjectBase):
-    def __init__(self):
-        RequestObjectBase.__init__(self)
-        self.deploymentPath = ''
-        self.attributes = None
-        self.customModel = None
-
-
-class AppResourceInfo(RequestObjectBase):
-    def __init__(self):
-        RequestObjectBase.__init__(self)
-        self.attributes = None
-
-
-class Attributes(RequestObjectBase):
-    def __init__(self):
-        RequestObjectBase.__init__(self)
-        self.attributeName = ''
-        self.attributeValue = ''
-
-class VlanServiceAttribute(Attributes):
-    def __init__(self):
-        Attributes.__init__(self)
-
-
-class ConnectorAttribute(Attributes):
-    def __init__(self):
-        Attributes.__init__(self)
-
-class CustomAttribute(Attributes):
-    def __init__(self):
-        Attributes.__init__(self)
+# endregion
