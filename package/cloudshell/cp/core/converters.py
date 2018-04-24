@@ -1,3 +1,4 @@
+import sys
 from cloudshell.cp.core.utils import  *
 from cloudshell.cp.core.models import *
 
@@ -5,35 +6,49 @@ class DriverRequestParser:
 
     def __init__(self):
         self.models_classes = {}
+        self.attribute_props = set(('attributeName','attributeValue'))
 
     def add_deployment_model(self, deployment_model_cls):
+        """
+        :param deployment_model_cls: the class you wish to inject to deployment.customModel
+
+        !!! deployment_model_cls must have __deploymentModel__
+        !!! deployment_model_cls must have attributes in constructor overload
+
+        """
+
         self.models_classes[deployment_model_cls.__deploymentModel__] = deployment_model_cls
 
     def convert_driver_request_to_actions(self, driver_request):
+        """
+        Extracts actions from given driver_request
 
-        actions = driver_request['driverRequest'].get('actions')
+        :param driver_request:
+        :return: [RequestActionBase]
+        """
 
-        if (actions == None):
-            print 'error'
+        req_actions = driver_request['driverRequest'].get('actions')
+
+        if (req_actions == None):
             return None
 
-        result = []
+        actions_result = []
 
-        for a in actions:
-            class_name = first_letter_to_upper(a.get('type'))
+        for req_action in req_actions:
+            class_name = first_letter_to_upper(req_action.get('type'))
             try:
                 created_action = getattr(sys.modules[__name__], class_name)()
-                self._convert_action(a, created_action)
-                result.append(created_action)
+                self._fill_recursive(req_action, created_action)
+                actions_result.append(created_action)
 
             except Exception as e:
                 print e.message
                 print 'no class named ' + class_name
                 pass
 
-        return  result
+        return  actions_result
 
-    def _create_by_type(self,source):
+    def _create_object_of_type(self, source):
         t = source.get('type')
 
         if (t == None):
@@ -44,37 +59,42 @@ class DriverRequestParser:
 
         return created
 
-    def _convert_action(self, source, result):
+    def _fill_recursive(self, source, result):
+        """
+        Fill result from source data ,Recursively!
+        :param source: source to read from
+        :param result: result to write to
 
+        """
         for key, value in source.items():
 
             if (isinstance(value, dict)):
-                created = self._create_by_type(value)
-                self.handle_deployemnt_custom_model(created, value)
-                self._set_value(result, key, created)
-                self._convert_action(value, getattr(result, key))
+                created = self._create_object_of_type(value)
+
+                # if we are at deployment object , create custom model
+                self._handle_deployemnt_custom_model(created, value)
+                set_value(result, key, created)
+                self._fill_recursive(value, getattr(result, key))
             elif (isinstance(value, (list))):
 
-                    if(self.try_convert_to_attributes_map(value, result, key)):
+                    if(self._try_convert_to_attributes_map(value, result, key)):
                         continue
 
                     created_arr = []
-                    self._set_value(result, key, created_arr)
+                    set_value(result, key, created_arr)
 
                     for item in value:
                         if isinstance(item, (dict)):
-                            created_item = self._create_by_type(item)
+                            created_item = self._create_object_of_type(item)
                             created_arr.append(created_item)
-                            self._convert_action(item, created_item)
+                            self._fill_recursive(item, created_item)
                         else:
                             created_arr.append(item)
 
-            else:
-                self._set_value(result, key, value)
+            else: # primitive value
+                set_value(result, key, value)
 
-
-
-    def handle_deployemnt_custom_model(self, result, item):
+    def _handle_deployemnt_custom_model(self, result, item):
 
         if item.get('type') != 'deployAppDeploymentInfo':
             return
@@ -93,36 +113,15 @@ class DriverRequestParser:
 
         result.customModel = model_class(convert_attributes_list_to_map(atts))
 
-    def is_attribute(self, item):
-        return  set(('attributeName','attributeValue')).issubset(item)
+    def _is_attribute(self, item):
+        return  self.attribute_props.issubset(item)
 
-    def try_convert_to_attributes_map(self, arr, result, key):
+    def _try_convert_to_attributes_map(self, arr, result, key):
 
         # if not All objects looks like attribute
-        if not all(self.is_attribute(item) for item in arr):
+        if not all(self._is_attribute(item) for item in arr):
             return False
 
-        self._set_value(result, key, convert_attributes_list_to_map(arr))
+        set_value(result, key, convert_attributes_list_to_map(arr))
 
         return True
-
-    def _set_value(self, target, name, value):
-
-        if isinstance(target, (list)):
-            target.append(value)
-        elif(name != 'type' and not try_set_attr(target, name, value)):
-            raise ValueError(target.__class__.__name__ +  ' has no property named ' + name)
-
-    def _try_set_attr(self, target, name, value):
-
-        try:
-            if (hasattr(target, name)):
-                setattr(target, name, value)
-                return True
-        except Exception as e:
-            pass
-
-        return False
-
-
-
