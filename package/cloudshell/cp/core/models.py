@@ -36,6 +36,15 @@ class ConnectivityVlanActionBase(ConnectivityActionBase):
 
 #endregion
 
+#region Common
+
+class Attributes(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.attributeName = ''
+        self.attributeValue = ''
+
+# endregion
 #region DeployApp
 
 class DeployApp(RequestActionBase):
@@ -65,7 +74,13 @@ class AppResourceInfo(RequestObjectBase):
         self.attributes = None   # type: dict
 
 #endregion
+#region CreateKeys
 
+class CreateKeys(ConnectivityActionBase):
+    def __init__(self):
+        ConnectivityActionBase.__init__(self)
+
+#endregion
 #region PrepareSubnet
 
 class PrepareSubnet(ConnectivityActionBase):
@@ -76,10 +91,10 @@ class PrepareSubnet(ConnectivityActionBase):
 class PrepareSubnetParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
-        self.cidr = ''                    # type: str
-        self.is_public = False            # type: bool
-        self.alias = ''                   # type: str
-        self.attributes = None            # type: dict
+        self.cidr = ''                      # type: str
+        self.isPublic = False              # type: bool
+        self.alias = ''                     # type: str
+        self.SubnetServiceAttributes = None # type: dict
 
 #endregion
 
@@ -121,8 +136,8 @@ class ConnectToSubnetParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
         self.cidr = ''                      # type: str
-        self.subnet_id = ''                 # type: str
-        self.is_public = False              # type: bool
+        self.subnetId = ''                 # type: str
+        self.isPublic = False              # type: bool
         self.subnetServiceAttributes = None # type: dict
         self.vnicName = ''                  # type: str
 
@@ -145,16 +160,33 @@ class PrepareCloudInfraParams(RequestObjectBase):
 
 #region actions results
 
-class DeployNetworkingResultModel(object):
+class DeployAppResult(object):
     def __init__(self, action_id):
         self.action_id = action_id  # type: str
-        self.interface_id = ''  # type: str
-        self.device_index = None  # type: int
-        self.private_ip = ''  # type: str
-        self.public_ip = ''  # type: str
-        self.mac_address = ''  # type: str
-        self.is_elastic_ip = False  # type: bool
+        self.vm_uuid = ''  # type: str
+        self.deployed_app_attributes = None  # type: []
+        self.deployed_app_additional_data = ''  # type: dict
+        self.type = 'DeployApp'  # type: str
 
+
+class VmDetailsData(object):
+    def __init__(self):
+        self.vm_instance_data = None  # type: [DeployVmDataElement]
+        self.vm_network_data  = None  # type: [DeployVmNetworkInterfaceDataResponse]
+
+class DeployVmDataElement(object):
+    def __init__(self):
+        self.key = ''    # type: str
+        self.value = ''  # type: str
+        self.hidden = '' # type: bool
+
+class DeployVmNetworkInterfaceDataResponse(object):
+    def __init__(self):
+        self.interface_id = ''    # type: str
+        self.network_id = ''  # type: str
+        self.is_primary = '' # type: bool
+        self.is_predefined = '' # type: bool
+        self.network_data = '' # type: [DeployVmDataElement]
 
 class ConnectivityActionResult(object):
     def __init__(self):
@@ -174,6 +206,7 @@ class PrepareSubnetActionResult(ConnectivityActionResult):
     def __init__(self):
         ConnectivityActionResult.__init__(self)
         self.subnetId = ''
+        self.type = 'PrepareSubnet'
 
 
 class ConnectToSubnetActionResult(ConnectivityActionResult):
@@ -186,6 +219,10 @@ class ConnectToSubnetActionResult(ConnectivityActionResult):
         self.infoMessage = info
         self.errorMessage = error
 
+class PrepareCreateKeysActionResult(ConnectivityActionResult):
+    def __init__(self):
+        ConnectivityActionResult.__init__(self)
+        self.AccessKey=''
 
 class SetAppSecurityGroupActionResult(object):
     def __init__(self):
