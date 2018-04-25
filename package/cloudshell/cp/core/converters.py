@@ -6,13 +6,13 @@ class DriverRequestParser:
 
     def __init__(self):
         self.models_classes = {}
-        self.attribute_props = set(('attributeName','attributeValue'))
+        self.attribute_props = {'attributeName', 'attributeValue'}
 
     def add_deployment_model(self, deployment_model_cls):
         """
         :param deployment_model_cls: the class you wish to inject to deployment.customModel
 
-        !!! deployment_model_cls must have __deploymentModel__
+        !!! deployment_model_cls must have global str __deploymentModel__
         !!! deployment_model_cls must have attributes in constructor overload
 
         """
@@ -72,7 +72,7 @@ class DriverRequestParser:
                 created = self._create_object_of_type(value)
 
                 # if we are at deployment object , create custom model
-                self._handle_deployemnt_custom_model(created, value)
+                self._handle_deployment_custom_model(created, value)
                 set_value(result, key, created)
                 self._fill_recursive(value, getattr(result, key))
             elif (isinstance(value, (list))):
@@ -94,7 +94,7 @@ class DriverRequestParser:
             else: # primitive value
                 set_value(result, key, value)
 
-    def _handle_deployemnt_custom_model(self, result, item):
+    def _handle_deployment_custom_model(self, result, item):
 
         if item.get('type') != 'deployAppDeploymentInfo':
             return
