@@ -25,16 +25,16 @@ class ConnectivityActionBase(RequestActionBase):
     def __init__(self):
         RequestActionBase.__init__(self)
         self.actionTarget = None           # type: ActionTarget
-        self.customActionAttributes = None # type: dict
 
 class ConnectivityVlanActionBase(ConnectivityActionBase):
     def __init__(self):
         ConnectivityActionBase.__init__(self)
-        self.connectionId = ''          # type: str
-        self.connectionParams = None    # type: SetVlanParameter
-        self.connectorAttributes = None # type: dict
+        self.connectionId = ''             # type: str
+        self.connectionParams = None       # type: SetVlanParameter
+        self.connectorAttributes = None    # type: dict
+        self.customActionAttributes = None # type: dict
 
-#endregion
+    #endregion
 
 #region Common
 
@@ -76,9 +76,9 @@ class AppResourceInfo(RequestObjectBase):
 #endregion
 #region CreateKeys
 
-class CreateKeys(ConnectivityActionBase):
+class CreateKeys(RequestActionBase):
     def __init__(self):
-        ConnectivityActionBase.__init__(self)
+        RequestActionBase.__init__(self)
 
 #endregion
 #region PrepareSubnet
