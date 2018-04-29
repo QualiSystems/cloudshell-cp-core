@@ -34,15 +34,15 @@ class ConnectivityVlanActionBase(ConnectivityActionBase):
         self.connectorAttributes = None    # type: dict
         self.customActionAttributes = None # type: dict
 
-    #endregion
+#endregion
 
 #region Common
 
-class Attributes(RequestObjectBase):
+class Attribute(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
-        self.attributeName = ''
-        self.attributeValue = ''
+        self.attributeName = ''  # type: str
+        self.attributeValue = '' # type: str
 
 # endregion
 #region DeployApp
@@ -92,9 +92,9 @@ class PrepareSubnetParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
         self.cidr = ''                      # type: str
-        self.isPublic = False              # type: bool
+        self.isPublic = False               # type: bool
         self.alias = ''                     # type: str
-        self.SubnetServiceAttributes = None # type: dict
+        self.subnetServiceAttributes = None # type: dict
 
 #endregion
 
@@ -160,88 +160,74 @@ class PrepareCloudInfraParams(RequestObjectBase):
 
 #region actions results
 
-class DeployAppResult(object):
-    def __init__(self, action_id):
-        self.action_id = action_id  # type: str
-        self.vm_uuid = ''  # type: str
-        self.deployed_app_attributes = None  # type: []
-        self.deployed_app_additional_data = ''  # type: dict
-        self.type = 'DeployApp'  # type: str
+class ActionResultBase:
+    def __init__(self, type,actionId = '',success = True ,infoMessage='',errorMessage = ''):
+        self.actionId = actionId      # type: str
+        self.success = success
+        self.infoMessage = infoMessage
+        self.errorMessage = errorMessage
+        self.type = type
+
+class DeployAppResult(ActionResultBase):
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',vm_uuid = '',vm_name = '',
+                 deployed_app_address = '',deployed_app_attributes = None,deployed_app_additional_data = None,
+                 vm_details_data = None):
+
+        ActionResultBase.__init__(self, 'DeployApp',actionId,success,infoMessage,errorMessage)
+        self.vmUuid = vm_uuid  # type: str
+        self.vmName = vm_name  # type: str
+        self.deployedAppAddress = deployed_app_address  # type: str
+        self.deployedAppAttributes = deployed_app_attributes if deployed_app_attributes else [] # type: [Attribute]
+        self.deployedAppAdditionalData = deployed_app_additional_data if deployed_app_additional_data else {} # type: dict
+        self.vmDetailsData = vm_details_data  # type: VmDetailsData
 
 
 class VmDetailsData(object):
-    def __init__(self):
-        self.vm_instance_data = None  # type: [DeployVmDataElement]
-        self.vm_network_data  = None  # type: [DeployVmNetworkInterfaceDataResponse]
+    def __init__(self,vm_instance_data = None,vm_network_data = None):
+
+        self.vmInstanceData =   vm_instance_data if  vm_instance_data  else  [] # type: [DeployVmDataElement]
+        self.vmNetworkData  =   vm_network_data  if  vm_network_data   else  [] # type: [DeployVmNetworkInterfaceDataResponse]
+
 
 class DeployVmDataElement(object):
-    def __init__(self):
-        self.key = ''    # type: str
-        self.value = ''  # type: str
-        self.hidden = '' # type: bool
+    def __init__(self,key = '',value = '',hidden = False):
+        self.key = key       # type: str
+        self.value = value   # type: str
+        self.hidden = hidden # type: bool
 
 class DeployVmNetworkInterfaceDataResponse(object):
-    def __init__(self):
-        self.interface_id = ''    # type: str
-        self.network_id = ''  # type: str
-        self.is_primary = '' # type: bool
-        self.is_predefined = '' # type: bool
-        self.network_data = '' # type: [DeployVmDataElement]
+    def __init__(self,interface_id = '',network_id = '',is_primary = False,is_predefined = False,network_data = None):
+        self.interfaceId = interface_id                            # type: str
+        self.networkId = network_id                                # type: str
+        self.isPrimary = is_primary                                # type: bool
+        self.isPredefined = is_predefined                          # type: bool
+        self.networkData =  network_data  if network_data  else [] # type: [DeployVmDataElement]
 
-class ConnectivityActionResult(object):
-    def __init__(self):
-        self.actionId = ''
-        self.success = True
-        self.infoMessage = ''
-        self.errorMessage = ''
+class PrepareCloudInfraResult(ActionResultBase):
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = ''):
+        ActionResultBase.__init__(self, 'PrepareNetwork',actionId,success,infoMessage,errorMessage)
 
 
-class PrepareCloudInfraResult(ConnectivityActionResult):
-    def __init__(self):
-        ConnectivityActionResult.__init__(self)
-        self.type = 'PrepareNetwork'
+class PrepareSubnetActionResult(ActionResultBase):
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',subnet_id = ''):
+        ActionResultBase.__init__(self, 'PrepareSubnet',actionId,success,infoMessage,errorMessage)
+        self.subnetId = subnet_id
 
 
-class PrepareSubnetActionResult(ConnectivityActionResult):
-    def __init__(self):
-        ConnectivityActionResult.__init__(self)
-        self.subnetId = ''
-        self.type = 'PrepareSubnet'
+class ConnectToSubnetActionResult(ActionResultBase):
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',interface = ''):
+        ActionResultBase.__init__(self, 'ConnectToSubnet',actionId,success,infoMessage,errorMessage)
+        self.interface = interface
 
 
-class ConnectToSubnetActionResult(ConnectivityActionResult):
-    def __init__(self, action_id, success, interface_data, info='', error=''):
-        ConnectivityActionResult.__init__(self)
-        self.actionId = action_id  # type: str
-        self.type = 'connectToSubnet'
-        self.success = success
-        self.interface = interface_data
-        self.infoMessage = info
-        self.errorMessage = error
+class CreateKeysActionResult(ActionResultBase):
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',access_key= '',subnet_id = ''):
+        ActionResultBase.__init__(self, 'CreateKeys',actionId,success,infoMessage,errorMessage)
+        self.accessKey= access_key   # type: str
+        self.subnetId = subnet_id    # type: str
 
-class PrepareCreateKeysActionResult(ConnectivityActionResult):
-    def __init__(self):
-        ConnectivityActionResult.__init__(self)
-        self.AccessKey=''
-
-class SetAppSecurityGroupActionResult(object):
-    def __init__(self):
-        self.appName = ''
-        self.success = True
-        self.error = ''
-
-    #
-    # def convert_to_json(self):
-    #     result = {'appName': self.appName, 'error': self.error, 'success': self.success}
-    #     return json.dumps(result)
-    #
-    # @staticmethod
-    # def to_json(results):
-    #     if not results:
-    #         return
-    #
-    #     return json.dumps([r.__dict__ for r in results])
-
-
+class SetAppSecurityGroupActionResult(ActionResultBase):
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = ''):
+        ActionResultBase.__init__(self, 'SetAppSecurityGroup',actionId,success,infoMessage,errorMessage)
 
 # endregion
