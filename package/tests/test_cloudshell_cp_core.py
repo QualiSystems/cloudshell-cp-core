@@ -64,15 +64,13 @@ class TestCloudShellCpCore(TestCase):
         # act
         actions = parser.convert_driver_request_to_actions(req)
         self.assertEqual(len(actions), 2)
+        prepare_cloud_infra = single(actions,lambda x: isinstance(x,PrepareCloudInfra))
 
-        prepare_cloud_infra = actions[0]
-        self.assertIsInstance(prepare_cloud_infra, PrepareCloudInfra)
 
         self.assertEqual(prepare_cloud_infra.actionId, '36af5bbf-c9b4-4e5d-b84b-9ea513c7defd')
         self.assertEqual(prepare_cloud_infra.actionParams.cidr, '10.0.1.0/24')
 
-        prepare_subnet = actions[1]
-        self.assertIsInstance(prepare_subnet, PrepareSubnet)
+        prepare_subnet = single(actions,lambda x: isinstance(x,PrepareSubnet ))
 
         self.assertEqual(prepare_subnet.actionParams.alias, 'DefaultSubnet')
         self.assertEqual(prepare_subnet.actionParams.isPublic, True)

@@ -31,6 +31,25 @@ def first_letter_to_upper(str):
 def to_snake_case(str):
     return  str.lower().replace(' ','_' )
 
+def first_or_default(lst, predicate):
+    result = filter(predicate, lst)[:1]
+    return result[0] if len(result) == 1 else None
+
+
+def single(lst, predicate):
+    return filter(predicate, lst)[0]
+
+def index_of(lst, predicate):
+    gen = (index for index, item in enumerate(lst) if predicate(item))
+
+    try:
+        first = gen.next()
+    except StopIteration:
+        return None
+
+    return first
+
+
 def convert_attributes_list_to_map(attributes):
 
     attributes_map = {}
