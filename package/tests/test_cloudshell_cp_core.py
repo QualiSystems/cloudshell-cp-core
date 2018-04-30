@@ -1,29 +1,29 @@
 from unittest import TestCase
 
-from  cloudshell.cp.core.converters import *
+from cloudshell.cp.core.converters import *
 from cloudshell.cp.core.models import *
-from cloudshell.cp.core.utils  import *
+from cloudshell.cp.core.utils import *
 
 from mock import Mock, patch
 import json
 
-class CustomModel():
+
+class CustomModel(object):
     __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
 
     def __init__(self, attributes):
         self.auto_power_off = ''
         self.autoload = ''
 
-        for k,v in attributes.iteritems():
-                try_set_attr(self, to_snake_case(k), v)
+        for k, v in attributes.iteritems():
+            try_set_attr(self, to_snake_case(k), v)
 
 
 class TestCloudShellCpCore(TestCase):
 
     def test_custom_deployment_model(self):
-
-        atts_json  = '[{"attributeName":"Auto Delete","attributeValue":"True","type":"attributes"},{"attributeName":"Autoload","attributeValue":"True","type":"attributes"},{"attributeName":"IP Regex","attributeValue":"","type":"attributes"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attributes"},{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attributes"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attributes"},{"attributeName":"VM Cluster","attributeValue":"","type":"attributes"},{"attributeName":"VM Storage","attributeValue":"","type":"attributes"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attributes"},{"attributeName":"VM Location","attributeValue":"","type":"attributes"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attributes"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attributes"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attributes"}]'
-        deploy_req_json = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes": ' + atts_json +' ,"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attributes"},{"attributeName":"Public IP","attributeValue":"","type":"attributes"},{"attributeName":"User","attributeValue":"","type":"attributes"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"7808cf76-b8c5-4392-b571-5da99836b84b","type":"deployApp"}]}}'
+        atts_json = '[{"attributeName":"Auto Delete","attributeValue":"True","type":"attributes"},{"attributeName":"Autoload","attributeValue":"True","type":"attributes"},{"attributeName":"IP Regex","attributeValue":"","type":"attributes"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attributes"},{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attributes"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attributes"},{"attributeName":"VM Cluster","attributeValue":"","type":"attributes"},{"attributeName":"VM Storage","attributeValue":"","type":"attributes"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attributes"},{"attributeName":"VM Location","attributeValue":"","type":"attributes"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attributes"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attributes"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attributes"}]'
+        deploy_req_json = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes": ' + atts_json + ' ,"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attributes"},{"attributeName":"Public IP","attributeValue":"","type":"attributes"},{"attributeName":"User","attributeValue":"","type":"attributes"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"7808cf76-b8c5-4392-b571-5da99836b84b","type":"deployApp"}]}}'
         deploy_req = json.loads(deploy_req_json)
 
         parser = DriverRequestParser()
@@ -37,7 +37,7 @@ class TestCloudShellCpCore(TestCase):
         #     self.assertTrue(attr_value,v)
 
         self.assertTrue(action.actionParams.deployment.customModel.autoload, 'True')
-        self.assertTrue(action.actionParams.deployment.customModel.auto_power_off , 'True')
+        self.assertTrue(action.actionParams.deployment.customModel.auto_power_off, 'True')
 
     def test_deploy_app_action(self):
         # prepare
@@ -48,11 +48,11 @@ class TestCloudShellCpCore(TestCase):
         parser = DriverRequestParser()
         deploy_action = parser.convert_driver_request_to_actions(req)[0]
         self.assertIsInstance(deploy_action, DeployApp)
-        self.assertEqual(deploy_action.actionParams.appName,'vCenter_CVC_Support')
+        self.assertEqual(deploy_action.actionParams.appName, 'vCenter_CVC_Support')
         self.assertEqual(deploy_action.actionParams.deployment.deploymentPath, "VCenter Deploy VM From Linked Clone")
         self.assertEqual(deploy_action.actionParams.deployment.attributes["vCenter VM Snapshot"], "1")
 
-        print json.dumps(deploy_action, default=lambda o: o.__dict__,sort_keys=True, indent=4)
+        print json.dumps(deploy_action, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def test_prepare_connectivity_action(self):
         # prepare
@@ -63,8 +63,7 @@ class TestCloudShellCpCore(TestCase):
 
         # act
         actions = parser.convert_driver_request_to_actions(req)
-        self.assertEqual(len(actions),2)
-
+        self.assertEqual(len(actions), 2)
         prepare_cloud_infra = single(actions,lambda x: isinstance(x,PrepareCloudInfra))
 
 
@@ -76,12 +75,10 @@ class TestCloudShellCpCore(TestCase):
         self.assertEqual(prepare_subnet.actionParams.alias, 'DefaultSubnet')
         self.assertEqual(prepare_subnet.actionParams.isPublic, True)
 
-
     def test_remove_vlan_action(self):
-
         # prepare
         json_req = '{  "driverRequest": {"actions": [{"connectionId":"2e85db89-f1c9-4da2-b738-6ed57d7c8ec6","connectionParams":{"vlanId":["2"],"mode":"Access","type":"setVlanParameter"},"connectorAttributes":[{"attributeName":"Interface","attributeValue":"00:50:56:a2:3c:83","type":"connectorAttribute"}],"actionId":"27409903-4d80-4607-8be2-8140285f87e6","actionTarget":{"fullName":"VM Deployment_6693d80d","fullAddress":"N/A","type":"actionTarget"},"customActionAttributes":[{"attributeName":"VM_UUID","attributeValue":"422279ec-e35a-b63f-591a-5e748514056d","type":"customAttribute"}],"type":"removeVlan"}]  }}'
-        req= json.loads(json_req)
+        req = json.loads(json_req)
 
         parser = DriverRequestParser()
 
@@ -90,5 +87,5 @@ class TestCloudShellCpCore(TestCase):
 
         # assert
         self.assertIsInstance(action, RemoveVlan)
-        self.assertEqual(action.connectionId,"2e85db89-f1c9-4da2-b738-6ed57d7c8ec6")
+        self.assertEqual(action.connectionId, "2e85db89-f1c9-4da2-b738-6ed57d7c8ec6")
         self.assertEqual(action.actionId, "27409903-4d80-4607-8be2-8140285f87e6")
