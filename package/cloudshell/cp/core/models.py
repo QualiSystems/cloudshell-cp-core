@@ -1,6 +1,5 @@
-
-
 #region base
+import json
 
 class RequestObjectBase(object):
     def __init__(self):
@@ -11,12 +10,11 @@ class RequestActionBase(RequestObjectBase):
         RequestObjectBase.__init__(self)
         self.actionId = '' # type: str
 
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
 class ActionTarget(RequestObjectBase):
     def __init__(self):
-        """
-        :type fullAddress:  str
-        :type fullName:  str
-        """
         RequestObjectBase.__init__(self)
         self.fullAddress = '' # type: str
         self.fullName = ''    # type: str
@@ -134,6 +132,7 @@ class ConnectSubnet(ConnectivityActionBase):
 
 class ConnectToSubnetParams(RequestObjectBase):
     def __init__(self):
+
         RequestObjectBase.__init__(self)
         self.cidr = ''                      # type: str
         self.subnetId = ''                 # type: str
@@ -162,6 +161,13 @@ class PrepareCloudInfraParams(RequestObjectBase):
 
 class ActionResultBase:
     def __init__(self, type,actionId = '',success = True ,infoMessage='',errorMessage = ''):
+        """
+        :param type:         str
+        :param actionId:     str
+        :param success:      bool
+        :param infoMessage:  str
+        :param errorMessage: str
+        """
         self.actionId = actionId      # type: str
         self.success = success
         self.infoMessage = infoMessage
@@ -169,39 +175,66 @@ class ActionResultBase:
         self.type = type
 
 class DeployAppResult(ActionResultBase):
-    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',vm_uuid = '',vm_name = '',
-                 deployed_app_address = '',deployed_app_attributes = None,deployed_app_additional_data = None,
-                 vm_details_data = None):
-
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',vmUuid = '',vmName = '',
+                 deployedAppAddress = '',deployedAppAttributes = None,deployedAppAdditionalData = None,
+                 vmDetailsData = None):
+        """
+        :param actionId:                  str
+        :param success:                   bool
+        :param infoMessage:               str
+        :param errorMessage:              str
+        :param vmUuid:                    str
+        :param vmName:                    str
+        :param deployedAppAddress:        str
+        :param deployedAppAttributes:     [Attribute]
+        :param deployedAppAdditionalData: dict
+        :param vmDetailsData:             VmDetailsData
+        """
         ActionResultBase.__init__(self, 'DeployApp',actionId,success,infoMessage,errorMessage)
-        self.vmUuid = vm_uuid  # type: str
-        self.vmName = vm_name  # type: str
-        self.deployedAppAddress = deployed_app_address  # type: str
-        self.deployedAppAttributes = deployed_app_attributes if deployed_app_attributes else [] # type: [Attribute]
-        self.deployedAppAdditionalData = deployed_app_additional_data if deployed_app_additional_data else {} # type: dict
-        self.vmDetailsData = vm_details_data  # type: VmDetailsData
+        self.vmUuid = vmUuid  # type: str
+        self.vmName = vmName  # type: str
+        self.deployedAppAddress = deployedAppAddress  # type: str
+        self.deployedAppAttributes = deployedAppAttributes if deployedAppAttributes else [] # type: [Attribute]
+        self.deployedAppAdditionalData = deployedAppAdditionalData if deployedAppAdditionalData else {} # type: dict
+        self.vmDetailsData = vmDetailsData  # type: VmDetailsData
 
 
 class VmDetailsData(object):
-    def __init__(self,vm_instance_data = None,vm_network_data = None):
+    def __init__(self,vmInstanceData = None,vmNetworkData = None):
+        """
+        :param vmInstanceData: [DeployVmDataElement]
+        :param vmNetworkData:  [DeployVmNetworkInterfaceDataResponse]
+        """
 
-        self.vmInstanceData =   vm_instance_data if  vm_instance_data  else  [] # type: [DeployVmDataElement]
-        self.vmNetworkData  =   vm_network_data  if  vm_network_data   else  [] # type: [DeployVmNetworkInterfaceDataResponse]
+        self.vmInstanceData =   vmInstanceData if  vmInstanceData  else  [] # type: [DeployVmDataElement]
+        self.vmNetworkData  =   vmNetworkData  if  vmNetworkData   else  [] # type: [DeployVmNetworkInterfaceDataResponse]
 
 
 class DeployVmDataElement(object):
     def __init__(self,key = '',value = '',hidden = False):
+        """
+        :param key:    str
+        :param value:  str
+        :param hidden: bool
+        """
         self.key = key       # type: str
         self.value = value   # type: str
         self.hidden = hidden # type: bool
 
 class DeployVmNetworkInterfaceDataResponse(object):
-    def __init__(self,interface_id = '',network_id = '',is_primary = False,is_predefined = False,network_data = None):
-        self.interfaceId = interface_id                            # type: str
-        self.networkId = network_id                                # type: str
-        self.isPrimary = is_primary                                # type: bool
-        self.isPredefined = is_predefined                          # type: bool
-        self.networkData =  network_data  if network_data  else [] # type: [DeployVmDataElement]
+    def __init__(self,interfaceId = '',networkId = '',isPrimary = False,isPredefined = False,networkData = None):
+        """
+        :param interfaceId:  str
+        :param networkId:    str
+        :param isPrimary:    bool
+        :param isPredefined: bool
+        :param networkData:  [DeployVmDataElement]
+        """
+        self.interfaceId = interfaceId                            # type: str
+        self.networkId = networkId                                # type: str
+        self.isPrimary = isPrimary                                # type: bool
+        self.isPredefined = isPredefined                          # type: bool
+        self.networkData =  networkData  if networkData  else [] # type: [DeployVmDataElement]
 
 class PrepareCloudInfraResult(ActionResultBase):
     def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = ''):
@@ -221,10 +254,14 @@ class ConnectToSubnetActionResult(ActionResultBase):
 
 
 class CreateKeysActionResult(ActionResultBase):
-    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',access_key= '',subnet_id = ''):
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',accessKey= '',subnetId = ''):
+        """
+        :param accessKey: str
+        :param subnetId:  str
+        """
         ActionResultBase.__init__(self, 'CreateKeys',actionId,success,infoMessage,errorMessage)
-        self.accessKey= access_key   # type: str
-        self.subnetId = subnet_id    # type: str
+        self.accessKey= accessKey   # type: str
+        self.subnetId = subnetId    # type: str
 
 class SetAppSecurityGroupActionResult(ActionResultBase):
     def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = ''):

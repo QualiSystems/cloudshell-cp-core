@@ -92,5 +92,3 @@ class TestCloudShellCpCore(TestCase):
         self.assertIsInstance(action, RemoveVlan)
         self.assertEqual(action.connectionId,"2e85db89-f1c9-4da2-b738-6ed57d7c8ec6")
         self.assertEqual(action.actionId, "27409903-4d80-4607-8be2-8140285f87e6")
-
-        # print json.dumps(action, default=lambda o: o.__dict__,sort_keys=True, indent=4)
