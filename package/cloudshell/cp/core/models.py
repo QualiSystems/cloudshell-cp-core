@@ -262,6 +262,12 @@ class CreateKeysActionResult(ActionResultBase):
 
 class SetAppSecurityGroupActionResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
+        """
+        :param str actionId:
+        :param bool success:
+        :param str infoMessage:
+        :param str errorMessage:
+        """
         ActionResultBase.__init__(self, 'SetAppSecurityGroup', actionId, success, infoMessage, errorMessage)
 
 # endregion
