@@ -254,14 +254,12 @@ class ConnectToSubnetActionResult(ActionResultBase):
 
 
 class CreateKeysActionResult(ActionResultBase):
-    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',accessKey= '',subnetId = ''):
+    def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',accessKey= ''):
         """
         :param accessKey: str
-        :param subnetId:  str
         """
         ActionResultBase.__init__(self, 'CreateKeys',actionId,success,infoMessage,errorMessage)
         self.accessKey= accessKey   # type: str
-        self.subnetId = subnetId    # type: str
 
 class SetAppSecurityGroupActionResult(ActionResultBase):
     def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = ''):
