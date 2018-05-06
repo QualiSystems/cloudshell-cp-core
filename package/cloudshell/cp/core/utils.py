@@ -1,3 +1,4 @@
+from cloudshell.cp.core.models import DriverResponseRoot,DriverResponse,Attribute
 
 def set_value(target, name, value, raise_exeception = False):
 
@@ -49,7 +50,6 @@ def index_of(lst, predicate):
 
     return first
 
-
 def convert_attributes_list_to_map(attributes):
 
     attributes_map = {}
@@ -59,3 +59,12 @@ def convert_attributes_list_to_map(attributes):
         attributes_map[item.get('attributeName')] = item.get('attributeValue')
 
     return attributes_map
+
+def convert_dict_to_attributes_list(attributes_dict):
+
+    attributes = []
+
+    for k,v in attributes_dict.iteritems():
+        attributes.append(Attribute(k,v))
+
+    return attributes
