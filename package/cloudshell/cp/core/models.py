@@ -10,9 +10,6 @@ class RequestActionBase(RequestObjectBase):
         RequestObjectBase.__init__(self)
         self.actionId = '' # type: str
 
-    def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
-
 class ActionTarget(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
@@ -37,10 +34,10 @@ class ConnectivityVlanActionBase(ConnectivityActionBase):
 #region Common
 
 class Attribute(RequestObjectBase):
-    def __init__(self):
+    def __init__(self,attributeName = '',attributeValue = ''):
         RequestObjectBase.__init__(self)
-        self.attributeName = ''  # type: str
-        self.attributeValue = '' # type: str
+        self.attributeName = attributeName    # type: str
+        self.attributeValue = attributeValue  # type: str
 
 # endregion
 #region DeployApp
@@ -135,8 +132,8 @@ class ConnectToSubnetParams(RequestObjectBase):
 
         RequestObjectBase.__init__(self)
         self.cidr = ''                      # type: str
-        self.subnetId = ''                 # type: str
-        self.isPublic = False              # type: bool
+        self.subnetId = ''                  # type: str
+        self.isPublic = False               # type: bool
         self.subnetServiceAttributes = None # type: dict
         self.vnicName = ''                  # type: str
 
@@ -157,6 +154,33 @@ class PrepareCloudInfraParams(RequestObjectBase):
 
 #endregion
 
+#region driver response
+
+class DriverResponseRoot(object):
+    def __init__(self,driverResponse = None):
+        """
+        :param driverResponse:  DriverResponse
+        """
+        self.driverResponse = driverResponse
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
+class DriverResponse(object):
+    def __init__(self,actionResults = None):
+        """
+        :param actionResults: [ActionResultBase]
+        """
+        self.actionResults = actionResults if actionResults else [] # type: [ActionResultBase]
+
+    def to_driver_response_json(self):
+        """
+        Wrap this object with DriverResponseRoot and converts it to json.
+        :return:
+        """
+        return DriverResponseRoot(driverResponse=self).to_json()
+
+#endregion
 #region actions results
 
 class ActionResultBase:
@@ -168,11 +192,12 @@ class ActionResultBase:
         :param infoMessage:  str
         :param errorMessage: str
         """
-        self.actionId = actionId      # type: str
-        self.success = success
-        self.infoMessage = infoMessage
-        self.errorMessage = errorMessage
-        self.type = type
+        self.type = type                 # type: str
+        self.actionId = actionId         # type: str
+        self.success = success           # type: bool
+        self.infoMessage = infoMessage   # type: str
+        self.errorMessage = errorMessage # type: str
+
 
 class DeployAppResult(ActionResultBase):
     def __init__(self,actionId = '',success = True ,infoMessage='',errorMessage = '',vmUuid = '',vmName = '',
