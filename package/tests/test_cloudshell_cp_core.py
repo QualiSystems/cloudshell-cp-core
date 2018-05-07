@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from cloudshell.cp.core.converters import *
+from cloudshell.cp.core import DriverRequestParser
 from cloudshell.cp.core.models import *
 from cloudshell.cp.core.utils import *
 

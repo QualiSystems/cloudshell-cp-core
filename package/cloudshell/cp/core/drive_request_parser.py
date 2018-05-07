@@ -27,6 +27,9 @@ class DriverRequestParser:
         :return: [RequestActionBase]
         """
 
+        if isinstance(driver_request, str):
+            driver_request = json.loads(driver_request)
+
         req_actions = driver_request['driverRequest'].get('actions')
 
         if (req_actions == None):
@@ -77,7 +80,7 @@ class DriverRequestParser:
                 self._fill_recursive(value, getattr(result, key))
             elif (isinstance(value, (list))):
 
-                    if(self._try_convert_to_attributes_map(value, result, key)):
+                    if(self._try_convert_to_attributes_dict(value, result, key)):
                         continue
 
                     created_arr = []
@@ -111,17 +114,17 @@ class DriverRequestParser:
         if not model_class:
             return
 
-        result.customModel = model_class(convert_attributes_list_to_map(atts))
+        result.customModel = model_class(convert_attributes_list_to_dict(atts))
 
     def _is_attribute(self, item):
         return  self.attribute_props.issubset(item)
 
-    def _try_convert_to_attributes_map(self, arr, result, key):
+    def _try_convert_to_attributes_dict(self, arr, result, key):
 
         # if not All objects looks like attribute
         if not all(self._is_attribute(item) for item in arr):
             return False
 
-        set_value(result, key, convert_attributes_list_to_map(arr))
+        set_value(result, key, convert_attributes_list_to_dict(arr))
 
         return True
