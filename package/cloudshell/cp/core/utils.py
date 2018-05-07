@@ -50,7 +50,7 @@ def index_of(lst, predicate):
 
     return first
 
-def convert_attributes_list_to_map(attributes):
+def convert_attributes_list_to_dict(attributes):
 
     attributes_map = {}
 
