@@ -3,18 +3,12 @@ from unittest import TestCase
 from cloudshell.cp.core import DriverRequestParser
 from cloudshell.cp.core.models import *
 from cloudshell.cp.core.utils import *
-
-from mock import Mock, patch
 import json
-
-
-
-
 
 class TestCloudShellCpCore(TestCase):
 
-
     def test_custom_deployment_model(self):
+        # prepare
         class CustomModel(object):
             __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
 
@@ -25,15 +19,19 @@ class TestCloudShellCpCore(TestCase):
         atts_json = '[{"attributeName":"Auto Delete","attributeValue":"True","type":"attributes"},{"attributeName":"Autoload","attributeValue":"True","type":"attributes"},{"attributeName":"IP Regex","attributeValue":"","type":"attributes"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attributes"},{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attributes"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attributes"},{"attributeName":"VM Cluster","attributeValue":"","type":"attributes"},{"attributeName":"VM Storage","attributeValue":"","type":"attributes"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attributes"},{"attributeName":"VM Location","attributeValue":"","type":"attributes"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attributes"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attributes"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attributes"}]'
         deploy_req_json = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes": ' + atts_json + ' ,"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attributes"},{"attributeName":"Public IP","attributeValue":"","type":"attributes"},{"attributeName":"User","attributeValue":"","type":"attributes"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"7808cf76-b8c5-4392-b571-5da99836b84b","type":"deployApp"}]}}'
 
+        # act
         parser = DriverRequestParser()
         parser.add_deployment_model(CustomModel)
 
         action = parser.convert_driver_request_to_actions(deploy_req_json)[0]
 
+        # assert
         self.assertTrue(action.actionParams.deployment.customModel.autoload, 'True')
         self.assertTrue(action.actionParams.deployment.customModel.auto_power_off, 'True')
 
     def test_custom_deployment_model_slicker(self):
+
+        # prepare
         class CustomModel(object):
             __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
 
@@ -47,11 +45,13 @@ class TestCloudShellCpCore(TestCase):
         atts_json = '[{"attributeName":"Auto Delete","attributeValue":"True","type":"attributes"},{"attributeName":"Autoload","attributeValue":"True","type":"attributes"},{"attributeName":"IP Regex","attributeValue":"","type":"attributes"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attributes"},{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attributes"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attributes"},{"attributeName":"VM Cluster","attributeValue":"","type":"attributes"},{"attributeName":"VM Storage","attributeValue":"","type":"attributes"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attributes"},{"attributeName":"VM Location","attributeValue":"","type":"attributes"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attributes"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attributes"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attributes"}]'
         deploy_req_json = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes": ' + atts_json + ' ,"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attributes"},{"attributeName":"Public IP","attributeValue":"","type":"attributes"},{"attributeName":"User","attributeValue":"","type":"attributes"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"7808cf76-b8c5-4392-b571-5da99836b84b","type":"deployApp"}]}}'
 
+        # act
         parser = DriverRequestParser()
         parser.add_deployment_model(CustomModel)
 
         action = parser.convert_driver_request_to_actions(deploy_req_json)[0]
 
+        # assert
         self.assertTrue(action.actionParams.deployment.customModel.autoload, 'True')
         self.assertTrue(action.actionParams.deployment.customModel.auto_power_off, 'True')
 
@@ -75,14 +75,13 @@ class TestCloudShellCpCore(TestCase):
         json_req = '{"driverRequest":{"actions":[{"actionParams":{"cidr":"10.0.1.0/24","type":"prepareCloudInfraParams"},"actionId":"36af5bbf-c9b4-4e5d-b84b-9ea513c7defd","type":"prepareCloudInfra"},{"actionParams":{"isPublic":true,"cidr":"10.0.1.0/24","alias":"DefaultSubnet","subnetServiceAttributes":null,"type":"prepareSubnetParams"},"actionTarget":{"fullName":null,"fullAddress":null,"type":"actionTarget"},"actionId":"0480fa41-f50b-42d6-9c0d-5518875f1176","type":"prepareSubnet"}]}}'
         req = json.loads(json_req)
 
-        parser = DriverRequestParser()
-
         # act
+        parser = DriverRequestParser()
         actions = parser.convert_driver_request_to_actions(req)
         self.assertEqual(len(actions), 2)
         prepare_cloud_infra = single(actions,lambda x: isinstance(x,PrepareCloudInfra))
 
-
+        # assert
         self.assertEqual(prepare_cloud_infra.actionId, '36af5bbf-c9b4-4e5d-b84b-9ea513c7defd')
         self.assertEqual(prepare_cloud_infra.actionParams.cidr, '10.0.1.0/24')
 
@@ -109,11 +108,13 @@ class TestCloudShellCpCore(TestCase):
 
 
     def test_parse_json_serialized_request(self):
+        # prepare
         json_req = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes":[{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attribute"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attribute"},{"attributeName":"VM Cluster","attributeValue":"","type":"attribute"},{"attributeName":"VM Storage","attributeValue":"","type":"attribute"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attribute"},{"attributeName":"VM Location","attributeValue":"","type":"attribute"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attribute"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attribute"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attribute"},{"attributeName":"Auto Delete","attributeValue":"True","type":"attribute"},{"attributeName":"Autoload","attributeValue":"True","type":"attribute"},{"attributeName":"IP Regex","attributeValue":"","type":"attribute"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attribute"}],"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attribute"},{"attributeName":"Public IP","attributeValue":"","type":"attribute"},{"attributeName":"User","attributeValue":"","type":"attribute"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"ad3561c1-45a5-445a-9b5f-4021879a0b0c","type":"deployApp"}]}}'
 
+        # act
         parser = DriverRequestParser()
-
         actions = parser.convert_driver_request_to_actions(json_req)
 
+        # assert
         self.assertTrue(len(actions) == 1)
         self.assertEqual(actions[0].actionParams.appName, 'vCenter_CVC_Support')
