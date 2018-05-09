@@ -61,6 +61,10 @@ Same but slicker
                 self.auto_power_off = ''
                 self.autoload = ''
 
+                # slicker since we are using utils.py functions: try_set_attr, to_snake_case.
+                # this way we scan all deployment attributes and if there is a corresponding named member in
+                # custom model e.g: auto_power_off corresponds 'Auto Power Off'
+                # that attribute value will be assigned to the corresponding member
                 for k, v in attributes.iteritems():
                     try_set_attr(self, to_snake_case(k), v)
 
