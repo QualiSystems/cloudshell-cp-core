@@ -1,5 +1,8 @@
-# cloudshell-cp-core
+[![PyPI](https://img.shields.io/pypi/v/cloudshell-cp-core.svg?maxAge=2592000&style=plastic)](https://pypi.python.org/pypi/cloudshell-cp-core/) [ ![Foo](https://qualisystems.getbadges.io/shield/company/qualisystems) ](https://getbadges.io) [![Coverage Status](https://coveralls.io/repos/github/QualiSystems/cloudshell-cp-core/badge.svg?branch=develop)](https://coveralls.io/github/QualiSystems/cloudshell-cp-core?branch=develop)
+[![Code Climate](https://codeclimate.com/github/QualiSystems/cloudshell-cp-core/badges/gpa.svg)](https://codeclimate.com/github/QualiSystems/cloudshell-cp-core)
+<a href='https://dependencyci.com/github/QualiSystems/cloudshell-cp-core'><img src='https://dependencyci.com/github/QualiSystems/cloudshell-cp-core/badge' alt='Dependency Status'/></a>
 
+# cloudshell-cp-core
 
 A repository for projects providing out of the box capabilities within CloudShell to parse and convert cloushell driver request to well defined python objects.
 One cloudshell-cp-core For All cloudshell cloud provider shells.
@@ -32,6 +35,7 @@ Parsing a driver request with custom deployment model
 
 ```
     def test_custom_deployment_model(self):
+        # prepare
         class CustomModel(object):
             __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
 
@@ -42,11 +46,12 @@ Parsing a driver request with custom deployment model
         atts_json = '[{"attributeName":"Auto Delete","attributeValue":"True","type":"attributes"},{"attributeName":"Autoload","attributeValue":"True","type":"attributes"},{"attributeName":"IP Regex","attributeValue":"","type":"attributes"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attributes"},{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attributes"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attributes"},{"attributeName":"VM Cluster","attributeValue":"","type":"attributes"},{"attributeName":"VM Storage","attributeValue":"","type":"attributes"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attributes"},{"attributeName":"VM Location","attributeValue":"","type":"attributes"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attributes"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attributes"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attributes"}]'
         deploy_req_json = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes": ' + atts_json + ' ,"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attributes"},{"attributeName":"Public IP","attributeValue":"","type":"attributes"},{"attributeName":"User","attributeValue":"","type":"attributes"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"7808cf76-b8c5-4392-b571-5da99836b84b","type":"deployApp"}]}}'
 
+        # act
         parser = DriverRequestParser()
         parser.add_deployment_model(CustomModel)
-
         action = parser.convert_driver_request_to_actions(deploy_req_json)[0]
 
+        # assert
         self.assertTrue(action.actionParams.deployment.customModel.autoload, 'True')
         self.assertTrue(action.actionParams.deployment.customModel.auto_power_off, 'True')
 ```
@@ -54,6 +59,8 @@ Same but slicker
 
 ```
     def test_custom_deployment_model_slicker(self):
+
+        # prepare
         class CustomModel(object):
             __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
 
@@ -71,11 +78,12 @@ Same but slicker
         atts_json = '[{"attributeName":"Auto Delete","attributeValue":"True","type":"attributes"},{"attributeName":"Autoload","attributeValue":"True","type":"attributes"},{"attributeName":"IP Regex","attributeValue":"","type":"attributes"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attributes"},{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attributes"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attributes"},{"attributeName":"VM Cluster","attributeValue":"","type":"attributes"},{"attributeName":"VM Storage","attributeValue":"","type":"attributes"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attributes"},{"attributeName":"VM Location","attributeValue":"","type":"attributes"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attributes"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attributes"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attributes"}]'
         deploy_req_json = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes": ' + atts_json + ' ,"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attributes"},{"attributeName":"Public IP","attributeValue":"","type":"attributes"},{"attributeName":"User","attributeValue":"","type":"attributes"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"7808cf76-b8c5-4392-b571-5da99836b84b","type":"deployApp"}]}}'
 
+        # act
         parser = DriverRequestParser()
         parser.add_deployment_model(CustomModel)
-
         action = parser.convert_driver_request_to_actions(deploy_req_json)[0]
 
+        # assert
         self.assertTrue(action.actionParams.deployment.customModel.autoload, 'True')
         self.assertTrue(action.actionParams.deployment.customModel.auto_power_off, 'True')
 
