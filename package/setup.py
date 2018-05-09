@@ -11,8 +11,9 @@ setup(
         name="cloudshell-cp-core",
         author="Quali",
         author_email="support@qualisystems.com",
-        description=("A repository for projects providing out of the box capabilities within CloudShell to parse "
-                     "cloushell action requests for apps in CloudShell sandboxes."),
+        description=("A repository for projects providing out of the box capabilities within CloudShell to parse and "
+                     "convert cloushell driver request to well defined python objects."
+                     "One cloudshell-cp-core For All cloudshell cloud provider shells."),
         packages=find_packages(),
         test_suite='nose.collector',
         package_data={'': ['*.txt']},
