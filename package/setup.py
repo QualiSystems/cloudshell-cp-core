@@ -4,9 +4,6 @@ import os
 with open(os.path.join('version.txt')) as version_file:
     version_from_file = version_file.read().strip()
 
-with open('test_requirements.txt') as f_tests:
-    required_for_tests = f_tests.read().splitlines()
-
 setup(
         name="cloudshell-cp-core",
         author="Quali",
