@@ -172,6 +172,22 @@ class PrepareCloudInfraParams(RequestObjectBase):
 
 # endregion
 
+# region SaveApp / RestoreApp
+class SaveApp(RequestActionBase):
+    def __init__(self):
+        RequestActionBase.__init__(self)
+        self.actionParams = None  # type: SaveAppParams
+
+
+class SaveAppParams(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.savedType      = ''  # type: str
+        self.savedSandboxId = ''  # type: str
+        self.sourceVmUuid   = ''  # type: str
+        self.appAttributes  = []  # type: list[Attribute]
+# endregion
+
 #region driver response
 
 class DriverResponseRoot(object):
@@ -201,6 +217,7 @@ class DriverResponse(object):
 #endregion
 # region actions results
 
+
 class ActionResultBase:
     def __init__(self, type, actionId='', success=True, infoMessage='', errorMessage=''):
         """
@@ -215,7 +232,6 @@ class ActionResultBase:
         self.success = success           # type: bool
         self.infoMessage = infoMessage   # type: str
         self.errorMessage = errorMessage # type: str
-
 
 
 class DeployAppResult(ActionResultBase):
@@ -312,4 +328,23 @@ class SetAppSecurityGroupActionResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
         ActionResultBase.__init__(self, 'SetAppSecurityGroup', actionId, success, infoMessage, errorMessage)
 
+
+class SaveAppResult(ActionResultBase):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', artifacts=None):
+        """:param artifacts: list[Artifact]"""
+        ActionResultBase.__init__(self, 'SaveApp', actionId, success, infoMessage, errorMessage)
+        self.artifacts = artifacts or []  # type: list[Artifact]
+
+
+class Artifact(object):
+    def __init__(self, artifactId='', customData=None):
+        """:param customData: [CustomDataElement]"""
+        self.artifactId = artifactId        # type str
+        self.customData = customData or []  # type list[CustomDataElement]
+
+
+class CustomDataElement(object):
+    def __init__(self, name, value):
+        self.name  = name   # type str
+        self.value = value  # type str
 # endregion
