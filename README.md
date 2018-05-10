@@ -1,5 +1,4 @@
-[![PyPI](https://img.shields.io/pypi/v/cloudshell-cp-core.svg?maxAge=2592000&style=plastic)](https://pypi.python.org/pypi/cloudshell-cp-core/) [ ![Foo](https://qualisystems.getbadges.io/shield/company/qualisystems) ](https://getbadges.io) [![Coverage Status](https://coveralls.io/repos/github/QualiSystems/cloudshell-cp-core/badge.svg?branch=develop)](https://coveralls.io/github/QualiSystems/cloudshell-cp-core?branch=develop)
-[![Code Climate](https://codeclimate.com/github/QualiSystems/cloudshell-cp-core/badges/gpa.svg)](https://codeclimate.com/github/QualiSystems/cloudshell-cp-core)
+[![PyPI](https://img.shields.io/pypi/v/cloudshell-cp-core.svg?maxAge=2592000&style=plastic)](https://pypi.python.org/pypi/cloudshell-cp-core/)[![Coverage Status](https://coveralls.io/repos/github/QualiSystems/cloudshell-cp-core/badge.svg?branch=develop)](https://coveralls.io/github/QualiSystems/cloudshell-cp-core?branch=develop)
 <a href='https://dependencyci.com/github/QualiSystems/cloudshell-cp-core'><img src='https://dependencyci.com/github/QualiSystems/cloudshell-cp-core/badge' alt='Dependency Status'/></a>
 
 # cloudshell-cp-core
