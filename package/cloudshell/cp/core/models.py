@@ -98,7 +98,7 @@ class PrepareSubnetParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
         self.cidr = ''  # type: str
-        self.isPublic = False  # type: bool
+        self.isPublic = True  # type: bool
         self.alias = ''  # type: str
         self.subnetServiceAttributes = None  # type: dict
 
@@ -149,7 +149,7 @@ class ConnectToSubnetParams(RequestObjectBase):
         RequestObjectBase.__init__(self)
         self.cidr = ''  # type: str
         self.subnetId = ''                  # type: str
-        self.isPublic = False               # type: bool
+        self.isPublic = True                # type: bool
         self.subnetServiceAttributes = None  # type: dict
         self.vnicName = ''  # type: str
 
