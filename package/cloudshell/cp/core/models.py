@@ -260,17 +260,20 @@ class DeployAppResult(ActionResultBase):
 
 
 class VmDetailsData(object):
-    def __init__(self, vmInstanceData=None, vmNetworkData=None):
+    def __init__(self, vmInstanceData=None, vmNetworkData=None,appName = '',errorMessage = ''):
         """
-        :param vmInstanceData: [DeployVmDataElement]
-        :param vmNetworkData:  [DeployVmNetworkInterfaceDataResponse]
+        :param vmInstanceData: [VmDetailsProperty]
+        :param vmNetworkData:  [VmDetailsNetworkInterface]
+        :param appName:        str
+        :param errorMessage:   str
         """
 
-        self.vmInstanceData = vmInstanceData if vmInstanceData else []  # type: [DeployVmDataElement]
-        self.vmNetworkData = vmNetworkData if vmNetworkData else []  # type: [DeployVmNetworkInterfaceDataResponse]
+        self.vmInstanceData = vmInstanceData if vmInstanceData else []  # type: [VmDetailsProperty]
+        self.vmNetworkData = vmNetworkData if vmNetworkData else []  # type: [VmDetailsNetworkInterface]
+        self.appName = appName
+        self.errorMessage = errorMessage
 
-
-class DeployVmDataElement(object):
+class VmDetailsProperty(object):
     def __init__(self, key='', value='', hidden=False):
         """
         :param key:    str
@@ -282,20 +285,24 @@ class DeployVmDataElement(object):
         self.hidden = hidden  # type: bool
 
 
-class DeployVmNetworkInterfaceDataResponse(object):
-    def __init__(self, interfaceId='', networkId='', isPrimary=False, isPredefined=False, networkData=None):
+class VmDetailsNetworkInterface(object):
+    def __init__(self, interfaceId='', networkId='', isPrimary=False, isPredefined=False, networkData=None,privateIpAddress='',publicIpAddress=''):
         """
         :param interfaceId:  str
         :param networkId:    str
         :param isPrimary:    bool
         :param isPredefined: bool
-        :param networkData:  [DeployVmDataElement]
+        :param networkData:  [VmDetailsProperty]
+        :param privateIpAddress:  str : mandatory when isPrimary==True
+        :param publicIpAddress:  str
         """
         self.interfaceId = interfaceId  # type: str
         self.networkId = networkId  # type: str
         self.isPrimary = isPrimary  # type: bool
         self.isPredefined = isPredefined  # type: bool
-        self.networkData = networkData if networkData else []  # type: [DeployVmDataElement]
+        self.networkData = networkData if networkData else []  # type: [VmDetailsProperty]
+        self.privateIpAddress = privateIpAddress  # type: str
+        self.publicIpAddress = publicIpAddress  # type: str
 
 
 class PrepareCloudInfraResult(ActionResultBase):
@@ -327,6 +334,7 @@ class CreateKeysActionResult(ActionResultBase):
 class SetAppSecurityGroupActionResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
         ActionResultBase.__init__(self, 'SetAppSecurityGroup', actionId, success, infoMessage, errorMessage)
+
 
 
 class SaveAppResult(ActionResultBase):
