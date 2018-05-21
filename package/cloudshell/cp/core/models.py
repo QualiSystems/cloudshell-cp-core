@@ -149,7 +149,7 @@ class ConnectToSubnetParams(RequestObjectBase):
         RequestObjectBase.__init__(self)
         self.cidr = ''  # type: str
         self.subnetId = ''                  # type: str
-        self.isPublic = True                # type: bool
+        self.isPublic = True               # type: bool
         self.subnetServiceAttributes = None  # type: dict
         self.vnicName = ''  # type: str
 
