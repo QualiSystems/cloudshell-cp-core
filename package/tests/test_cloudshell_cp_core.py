@@ -36,8 +36,9 @@ class TestCloudShellCpCore(TestCase):
             __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
 
             def __init__(self, attributes):
-                self.auto_power_off = ''
+                self.auto_power_off = False
                 self.autoload = ''
+
 
                 for k, v in attributes.iteritems():
                     try_set_attr(self, to_snake_case(k), v)
@@ -52,8 +53,9 @@ class TestCloudShellCpCore(TestCase):
         action = parser.convert_driver_request_to_actions(deploy_req_json)[0]
 
         # assert
-        self.assertTrue(action.actionParams.deployment.customModel.autoload, 'True')
-        self.assertTrue(action.actionParams.deployment.customModel.auto_power_off, 'True')
+        self.assertEqual(action.actionParams.deployment.customModel.autoload, 'True')
+        self.assertEqual(action.actionParams.deployment.customModel.auto_power_off, True)
+
 
     def test_deploy_app_action(self):
         # prepare
@@ -118,3 +120,14 @@ class TestCloudShellCpCore(TestCase):
         # assert
         self.assertTrue(len(actions) == 1)
         self.assertEqual(actions[0].actionParams.appName, 'vCenter_CVC_Support')
+
+    def test_try_set_attr(self):
+
+        class CustomModel(object):
+            __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
+
+            def __init__(self, attributes):
+                self.auto_power_off = attributes['Auto Power Off']
+                self.autoload = attributes['Autoload']
+
+        atts_json = '[{"attributeName":"Auto Delete","attributeValue":"True","type":"attributes"},{"attributeName":"Autoload","attributeValue":"True","type":"attributes"},{"attributeName":"IP Regex","attributeValue":"","type":"attributes"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attributes"},{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attributes"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attributes"},{"attributeName":"VM Cluster","attributeValue":"","type":"attributes"},{"attributeName":"VM Storage","attributeValue":"","type":"attributes"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attributes"},{"attributeName":"VM Location","attributeValue":"","type":"attributes"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attributes"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attributes"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attributes"}]'

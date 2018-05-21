@@ -7,12 +7,21 @@ def set_value(target, name, value, raise_exeception = False):
     elif(not try_set_attr(target, name, value) and raise_exeception):
         raise ValueError(target.__class__.__name__ +  ' has no property named ' + name)
 
+def convert_to_bool(v):
+
+    if type(v) is bool:
+        return v
+
+    return v != None and v.lower() == "true"
+
 def try_set_attr(target, name, value):
 
     try:
         if (hasattr(target, name)):
+            value = convert_to_bool(value) if type(getattr(target, name)) is bool else value
             setattr(target, name, value)
             return True
+
     except Exception as e:
         pass
 
