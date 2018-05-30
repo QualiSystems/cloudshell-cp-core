@@ -182,10 +182,10 @@ class SaveApp(RequestActionBase):
 class SaveAppParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
-        self.savedType      = ''  # type: str
-        self.savedSandboxId = ''  # type: str
-        self.sourceVmUuid   = ''  # type: str
-        self.appAttributes  = []  # type: list[Attribute]
+        self.savedType                 = ''  # type: str
+        self.savedSandboxId            = ''  # type: str
+        self.sourceVmUuid              = ''  # type: str
+        self.deploymentPathAttributes  = []  # type: list[Attribute]
 # endregion
 
 #region driver response
