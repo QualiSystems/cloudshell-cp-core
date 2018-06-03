@@ -219,7 +219,7 @@ class DriverResponse(object):
 
 
 class ActionResultBase:
-    def __init__(self, type, actionId='', success=True, infoMessage='', errorMessage=''):
+    def __init__(self, type='', actionId='', success=True, infoMessage='', errorMessage=''):
         """
         :param type:         str
         :param actionId:     str
