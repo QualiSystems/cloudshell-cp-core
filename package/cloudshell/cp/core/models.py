@@ -336,23 +336,28 @@ class SetAppSecurityGroupActionResult(ActionResultBase):
         ActionResultBase.__init__(self, 'SetAppSecurityGroup', actionId, success, infoMessage, errorMessage)
 
 
-
 class SaveAppResult(ActionResultBase):
-    def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', artifacts=None):
-        """:param artifacts: list[Artifact]"""
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', artifacts=None,
+                 savedEntityAttributes=None, additionalData=None):
+        """
+        :param artifacts: list[Artifact]
+        :param savedEntityAttributes: list[Attribute]
+        :param additionalData: list[DataElement]
+        """
         ActionResultBase.__init__(self, 'SaveApp', actionId, success, infoMessage, errorMessage)
-        self.artifacts = artifacts or []  # type: list[Artifact]
+        self.artifacts             = artifacts or []  # type: list[Artifact]
+        self.savedEntityAttributes = savedEntityAttributes or dict
+        self.additionalData        = additionalData or []
 
 
 class Artifact(object):
-    def __init__(self, artifactId='', customData=None):
-        """:param customData: [CustomDataElement]"""
-        self.artifactId = artifactId        # type str
-        self.customData = customData or []  # type list[CustomDataElement]
+    def __init__(self, artifactId='', artifactName=''):
+        self.artifactId   = artifactId      # type str
+        self.artifactName = artifactName    # type str
 
 
-class CustomDataElement(object):
+class DataElement(object):
     def __init__(self, name, value):
-        self.name  = name   # type str
-        self.value = value  # type str
+        self.name  = name
+        self.value = value
 # endregion
