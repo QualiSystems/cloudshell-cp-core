@@ -346,7 +346,7 @@ class SaveAppResult(ActionResultBase):
         """
         ActionResultBase.__init__(self, 'SaveApp', actionId, success, infoMessage, errorMessage)
         self.artifacts             = artifacts or []  # type: list[Artifact]
-        self.savedEntityAttributes = savedEntityAttributes or dict
+        self.savedEntityAttributes = savedEntityAttributes or []
         self.additionalData        = additionalData or []
 
 
