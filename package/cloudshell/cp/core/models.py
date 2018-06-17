@@ -188,7 +188,24 @@ class SaveAppParams(RequestObjectBase):
         self.deploymentPathAttributes  = []  # type: list[Attribute]
 # endregion
 
-#region driver response
+
+# region Delete Saved Sandbox
+class DeleteSavedApp(RequestActionBase):
+    def __init__(self):
+        RequestActionBase.__init__(self)
+        self.actionParams = None  # type: DeleteSavedAppParams
+
+
+class DeleteSavedAppParams(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.saveDeploymentModel       = ''  # type: str
+        self.savedSandboxId            = ''  # type: str
+        self.artifacts                 = []  # type: list[Artifact]
+# endregion
+
+
+# region driver response
 
 class DriverResponseRoot(object):
     def __init__(self,driverResponse = None):
