@@ -202,6 +202,7 @@ class DeleteSavedAppParams(RequestObjectBase):
         self.saveDeploymentModel       = ''  # type: str
         self.savedSandboxId            = ''  # type: str
         self.artifacts                 = []  # type: list[Artifact]
+        self.savedAppName              = ''  # type: str
 # endregion
 
 
