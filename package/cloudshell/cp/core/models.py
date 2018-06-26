@@ -367,10 +367,11 @@ class SaveAppResult(ActionResultBase):
         self.additionalData        = additionalData or []
 
 
-class Artifact(object):
-    def __init__(self, artifactId='', artifactName=''):
-        self.artifactId   = artifactId      # type str
-        self.artifactName = artifactName    # type str
+class Artifact(RequestObjectBase):
+    def __init__(self, artifactRef='', artifactName=''):
+        RequestObjectBase.__init__(self)
+        self.artifactRef   = artifactRef      # type str
+        self.artifactName  = artifactName     # type str
 
 
 class DataElement(object):
