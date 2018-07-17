@@ -185,6 +185,7 @@ class SaveAppParams(RequestObjectBase):
         self.saveDeploymentModel       = ''  # type: str
         self.savedSandboxId            = ''  # type: str
         self.sourceVmUuid              = ''  # type: str
+        self.sourceAppName             = ''  # type: str
         self.deploymentPathAttributes  = []  # type: list[Attribute]
 # endregion
 
