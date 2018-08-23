@@ -368,6 +368,15 @@ class SaveAppResult(ActionResultBase):
         self.savedEntityAttributes = savedEntityAttributes or []
         self.additionalData        = additionalData or []
 
+class SetVlanResult(ActionResultBase):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', updatedInterface=''):
+        ActionResultBase.__init__(self, 'setVlan', actionId, success, infoMessage, errorMessage)
+        self.updatedInterface = updatedInterface
+
+class RemoveVlanResult(ActionResultBase):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', updatedInterface=''):
+        ActionResultBase.__init__(self, 'removeVlan', actionId, success, infoMessage, errorMessage)
+        self.updatedInterface = updatedInterface
 
 class Artifact(RequestObjectBase):
     def __init__(self, artifactRef='', artifactName=''):
@@ -380,4 +389,5 @@ class DataElement(object):
     def __init__(self, name, value):
         self.name  = name
         self.value = value
+
 # endregion
