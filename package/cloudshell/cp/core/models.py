@@ -378,6 +378,11 @@ class RemoveVlanResult(ActionResultBase):
         ActionResultBase.__init__(self, 'removeVlan', actionId, success, infoMessage, errorMessage)
         self.updatedInterface = updatedInterface
 
+class CleanupNetworkResult(ActionResultBase):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
+        ActionResultBase.__init__(self, 'CleanupNetwork', actionId, success, infoMessage, errorMessage)
+
+
 class Artifact(RequestObjectBase):
     def __init__(self, artifactRef='', artifactName=''):
         RequestObjectBase.__init__(self)
