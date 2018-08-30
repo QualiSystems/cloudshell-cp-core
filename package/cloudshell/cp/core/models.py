@@ -374,9 +374,8 @@ class SetVlanResult(ActionResultBase):
         self.updatedInterface = updatedInterface
 
 class RemoveVlanResult(ActionResultBase):
-    def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', updatedInterface=''):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
         ActionResultBase.__init__(self, 'removeVlan', actionId, success, infoMessage, errorMessage)
-        self.updatedInterface = updatedInterface
 
 class CleanupNetworkResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
