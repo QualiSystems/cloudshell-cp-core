@@ -47,7 +47,7 @@ def first_or_default(lst, predicate):
 
 
 def single(lst, predicate):
-    return filter(predicate, lst)[0]
+    return list(filter(predicate, lst))[0]
 
 def index_of(lst, predicate):
     gen = (index for index, item in enumerate(lst) if predicate(item))

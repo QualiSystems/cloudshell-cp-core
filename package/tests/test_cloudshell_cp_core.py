@@ -40,7 +40,7 @@ class TestCloudShellCpCore(TestCase):
                 self.autoload = ''
 
 
-                for k, v in attributes.iteritems():
+                for k, v in attributes.items():
                     try_set_attr(self, to_snake_case(k), v)
 
         atts_json = '[{"attributeName":"Auto Delete","attributeValue":"True","type":"attributes"},{"attributeName":"Autoload","attributeValue":"True","type":"attributes"},{"attributeName":"IP Regex","attributeValue":"","type":"attributes"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attributes"},{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attributes"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attributes"},{"attributeName":"VM Cluster","attributeValue":"","type":"attributes"},{"attributeName":"VM Storage","attributeValue":"","type":"attributes"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attributes"},{"attributeName":"VM Location","attributeValue":"","type":"attributes"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attributes"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attributes"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attributes"}]'
@@ -107,6 +107,20 @@ class TestCloudShellCpCore(TestCase):
         self.assertIsInstance(action, RemoveVlan)
         self.assertEqual(action.connectionId, "2e85db89-f1c9-4da2-b738-6ed57d7c8ec6")
         self.assertEqual(action.actionId, "27409903-4d80-4607-8be2-8140285f87e6")
+
+    def test_set_vlan_action(self):
+        # prepare
+
+        json_req = '{"driverRequest":{"actions":[{"connectionId":"3241eb47-3d9a-4dda-becf-b6c010b8622e","connectionParams":{"vlanId":"4","mode":"Access","vlanServiceAttributes":[{"attributeName":"QnQ","attributeValue":"False","type":"vlanServiceAttribute"},{"attributeName":"CTag","attributeValue":"","type":"vlanServiceAttribute"},{"attributeName":"Allocation Ranges","attributeValue":"2-4094","type":"vlanServiceAttribute"},{"attributeName":"Isolation Level","attributeValue":"Exclusive","type":"vlanServiceAttribute"},{"attributeName":"Access Mode","attributeValue":"Access","type":"vlanServiceAttribute"},{"attributeName":"VLAN ID","attributeValue":"","type":"vlanServiceAttribute"},{"attributeName":"Pool Name","attributeValue":"","type":"vlanServiceAttribute"},{"attributeName":"Virtual Network","attributeValue":"4","type":"vlanServiceAttribute"}],"type":"setVlanParameter"},"connectorAttributes":[],"actionTarget":{"fullName":"super__183bf1","fullAddress":"5.5.5.1","type":"actionTarget"},"customActionAttributes":[{"attributeName":"CreatedBy","attributeValue":"c:usersnoam.wappdatalocaltemptmp_nrzyr.zip_envheavenly_cloud_service_wrapper.py","type":"customAttribute"},{"attributeName":"Reservation Id","attributeValue":"d4e76ed2-e04d-47d5-8cf0-4fe875140c21","type":"customAttribute"},{"attributeName":"VM_UUID","attributeValue":"20f6bf85-c72d-47ad-bfc8-d1f3159e085b","type":"customAttribute"}],"actionId":"3241eb47-3d9a-4dda-becf-b6c010b8622e_76fad88f-f27b-4212-b64f-81ae9a6e6444","type":"setVlan"}]}}'
+
+        parser = DriverRequestParser()
+
+        # act
+        actions = parser.convert_driver_request_to_actions(json_req)
+        remove_vlan_actions = list(filter(lambda x: isinstance(x, SetVlan), actions))
+        # assert
+        self.assertIsInstance(remove_vlan_actions[0], SetVlan)
+
 
 
     def test_parse_json_serialized_request(self):

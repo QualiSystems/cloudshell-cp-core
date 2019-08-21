@@ -45,8 +45,8 @@ class DriverRequestParser:
                 actions_result.append(created_action)
 
             except Exception as e:
-                print e.message
-                print 'no class named ' + class_name
+                print (e.message)
+                print ('no class named ' + class_name)
                 pass
 
         return  actions_result
