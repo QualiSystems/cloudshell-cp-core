@@ -206,6 +206,34 @@ class DeleteSavedAppParams(RequestObjectBase):
         self.savedAppName              = ''  # type: str
 # endregion
 
+# region Traffic Mirroring
+
+
+class CreateTrafficMirroring(RequestActionBase):
+    def __init__(self):
+        self.actionParams = None  # type: CreateTrafficMirroringParams
+
+
+class CreateTrafficMirroringParams(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.sourceNicId = ''  # type: str
+        self.targetNicId = ''  # type: str
+        self.sessionNumber = ''  # type: str
+        self.filterRules = []  # type: list[TrafficFilterRule]
+
+
+class TrafficFilterRule(object):
+    def __init__(self):
+        self.direction = ''  # type: str
+        self.destinationCidr = ''  # type: str
+        self.destinationPortRange = ''  # type: str
+        self.sourceCidr = ''  # type: str
+        self.sourcePortRange = ''  # type: str
+        self.Protocol = ''  # type: str
+
+# endregion
+
 
 # region driver response
 
