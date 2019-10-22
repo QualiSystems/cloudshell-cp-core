@@ -1,8 +1,15 @@
+class Printable:
+    def __str__(self):
+        return str(self.__class__) + ":\t" + str(self.__dict__)
+
+    def __repr__(self):
+        return str(self)
+
 # region base
 import json
 
 
-class RequestObjectBase(object):
+class RequestObjectBase(Printable):
     def __init__(self):
         pass
 
@@ -211,6 +218,7 @@ class DeleteSavedAppParams(RequestObjectBase):
 
 class CreateTrafficMirroring(RequestActionBase):
     def __init__(self):
+        RequestActionBase.__init__(self)
         self.actionParams = None  # type: CreateTrafficMirroringParams
 
 
@@ -223,14 +231,14 @@ class CreateTrafficMirroringParams(RequestObjectBase):
         self.filterRules = []  # type: list[TrafficFilterRule]
 
 
-class TrafficFilterRule(object):
+class TrafficFilterRule(Printable):
     def __init__(self):
         self.direction = ''  # type: str
         self.destinationCidr = ''  # type: str
         self.destinationPortRange = ''  # type: str
         self.sourceCidr = ''  # type: str
         self.sourcePortRange = ''  # type: str
-        self.Protocol = ''  # type: str
+        self.protocol = ''  # type: str
 
 # endregion
 
