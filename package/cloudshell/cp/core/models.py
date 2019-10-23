@@ -418,6 +418,12 @@ class CleanupNetworkResult(ActionResultBase):
         ActionResultBase.__init__(self, 'CleanupNetwork', actionId, success, infoMessage, errorMessage)
 
 
+class TrafficMirroringResult(ActionResultBase):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', sessionId=''):
+        ActionResultBase.__init__(self, 'CreateTrafficMirroring', actionId, success, infoMessage, errorMessage)
+        self.sessionId = sessionId
+
+
 class Artifact(RequestObjectBase):
     def __init__(self, artifactRef='', artifactName=''):
         RequestObjectBase.__init__(self)
