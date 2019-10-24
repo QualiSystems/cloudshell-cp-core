@@ -231,14 +231,23 @@ class CreateTrafficMirroringParams(RequestObjectBase):
         self.filterRules = []  # type: list[TrafficFilterRule]
 
 
-class TrafficFilterRule(Printable):
+class TrafficFilterRule(RequestObjectBase):
     def __init__(self):
+        RequestObjectBase.__init__(self)
         self.direction = ''  # type: str
         self.destinationCidr = ''  # type: str
-        self.destinationPortRange = ''  # type: str
+        self.destinationPortRange = None  # type: PortRange
         self.sourceCidr = ''  # type: str
-        self.sourcePortRange = ''  # type: str
+        self.sourcePortRange = None  # type: PortRange
         self.protocol = ''  # type: str
+
+
+class PortRange(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.fromPort = ''  # type: str
+        self.toPort = ''  # type: str
+
 
 # endregion
 
