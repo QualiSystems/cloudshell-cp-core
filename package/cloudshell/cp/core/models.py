@@ -216,6 +216,13 @@ class DeleteSavedAppParams(RequestObjectBase):
 # region Traffic Mirroring
 
 
+class RemoveTrafficMirroring(RequestActionBase):
+    def __init__(self):
+        RequestActionBase.__init__(self)
+        self.sessionId = ''  # type: str
+        self.targetNicId = ''  # type: str
+
+
 class CreateTrafficMirroring(RequestActionBase):
     def __init__(self):
         RequestActionBase.__init__(self)
@@ -431,6 +438,11 @@ class TrafficMirroringResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', sessionId=''):
         ActionResultBase.__init__(self, 'CreateTrafficMirroring', actionId, success, infoMessage, errorMessage)
         self.sessionId = sessionId
+
+
+class RemoveTrafficMirroringResult(ActionResultBase):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
+        ActionResultBase.__init__(self, 'RemoveTrafficMirroring', actionId, success, infoMessage, errorMessage)
 
 
 class Artifact(RequestObjectBase):
