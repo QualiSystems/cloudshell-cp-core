@@ -1,8 +1,15 @@
+class Printable:
+    def __str__(self):
+        return str(self.__class__) + ":\t" + str(self.__dict__)
+
+    def __repr__(self):
+        return str(self)
+
 # region base
 import json
 
 
-class RequestObjectBase(object):
+class RequestObjectBase(Printable):
     def __init__(self):
         pass
 
@@ -206,6 +213,51 @@ class DeleteSavedAppParams(RequestObjectBase):
         self.savedAppName              = ''  # type: str
 # endregion
 
+# region Traffic Mirroring
+
+
+class RemoveTrafficMirroring(RequestActionBase):
+    def __init__(self):
+        RequestActionBase.__init__(self)
+        self.sessionId = ''  # type: str
+        self.targetNicId = ''  # type: str
+
+
+class CreateTrafficMirroring(RequestActionBase):
+    def __init__(self):
+        RequestActionBase.__init__(self)
+        self.actionParams = None  # type: CreateTrafficMirroringParams
+
+
+class CreateTrafficMirroringParams(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.sourceNicId = ''  # type: str
+        self.targetNicId = ''  # type: str
+        self.sessionNumber = ''  # type: str
+        self.filterRules = []  # type: list[TrafficFilterRule]
+
+
+class TrafficFilterRule(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.direction = ''  # type: str
+        self.destinationCidr = ''  # type: str
+        self.destinationPortRange = None  # type: PortRange
+        self.sourceCidr = ''  # type: str
+        self.sourcePortRange = None  # type: PortRange
+        self.protocol = ''  # type: str
+
+
+class PortRange(RequestObjectBase):
+    def __init__(self):
+        RequestObjectBase.__init__(self)
+        self.fromPort = ''  # type: str
+        self.toPort = ''  # type: str
+
+
+# endregion
+
 
 # region driver response
 
@@ -380,6 +432,17 @@ class RemoveVlanResult(ActionResultBase):
 class CleanupNetworkResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
         ActionResultBase.__init__(self, 'CleanupNetwork', actionId, success, infoMessage, errorMessage)
+
+
+class TrafficMirroringResult(ActionResultBase):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', sessionId=''):
+        ActionResultBase.__init__(self, 'CreateTrafficMirroring', actionId, success, infoMessage, errorMessage)
+        self.sessionId = sessionId
+
+
+class RemoveTrafficMirroringResult(ActionResultBase):
+    def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
+        ActionResultBase.__init__(self, 'RemoveTrafficMirroring', actionId, success, infoMessage, errorMessage)
 
 
 class Artifact(RequestObjectBase):
