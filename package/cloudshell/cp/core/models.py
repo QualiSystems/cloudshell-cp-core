@@ -268,8 +268,15 @@ class DriverResponseRoot(object):
         """
         self.driverResponse = driverResponse
 
+    def _default_json_dump(self, obj):
+        if isinstance(obj, bytes):
+            return str(obj)
+
+        return obj.__dict__
+
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+        return json.dumps(self, default=self._default_json_dump)
+
 
 class DriverResponse(object):
     def __init__(self,actionResults = None):
