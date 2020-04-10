@@ -1,9 +1,53 @@
 import sys
-from cloudshell.cp.core.utils import  *
+from cloudshell.cp.core.utils import *
 from cloudshell.cp.core.models import *
 
-class DriverRequestParser:
 
+# todo: refactor this module
+from cloudshell.cp.core.utils import single
+
+
+class PrepareSandboxInfraRequestActions:
+    def __init__(self):
+        self.prepare_cloud_infra = None
+        self.prepare_subnets = []
+        self.create_keys = None
+
+    @classmethod
+    def from_request(cls, request):
+        actions = DriverRequestParser().convert_driver_request_to_actions(request)
+        obj = cls()
+
+        for action in actions:
+            if isinstance(action, PrepareCloudInfra):
+                obj.prepare_cloud_infra = action
+            elif isinstance(action, PrepareSubnet):
+                obj.prepare_subnets.append(action)
+            elif isinstance(action, CreateKeys):
+                obj.create_keys = action
+
+        return obj
+
+
+class DeployAppRequestAction:
+    def __init__(self, prepare_cloud_infra, prepare_subnet, create_keys):
+        self.prepare_cloud_infra = prepare_cloud_infra
+        self.prepare_subnet = prepare_subnet
+        self.create_keys = create_keys
+
+    @classmethod
+    def from_request(cls, request):
+        actions = DriverRequestParser().convert_driver_request_to_actions(request)
+        prep_network_action = single(actions, lambda x: isinstance(x, PrepareCloudInfra))
+        prep_subnet_action = single(actions, lambda x: isinstance(x, PrepareSubnet))
+        access_keys_action = single(actions, lambda x: isinstance(x, CreateKeys))
+
+        return cls(prepare_cloud_infra=prep_network_action,
+                   prepare_subnet=prep_subnet_action,
+                   create_keys=access_keys_action)
+
+
+class DriverRequestParser:
     def __init__(self):
         self.models_classes = {}
         self.attribute_props = {'attributeName', 'attributeValue'}
