@@ -42,9 +42,7 @@ def to_snake_case(str):
     return  str.lower().replace(' ','_' )
 
 def first_or_default(lst, predicate):
-    result = filter(predicate, lst)[:1]
-    return result[0] if len(result) == 1 else None
-
+    return next(filter(predicate, lst), None)
 
 def single(lst, predicate):
     return list(filter(predicate, lst))[0]
