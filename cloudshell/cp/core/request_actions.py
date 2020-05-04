@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
 import json
+from dataclasses import dataclass, field
 
 from cloudshell.cp.core import models
 
@@ -44,7 +44,9 @@ class BaseRequestActions:
 
                 if issubclass(parsed_cls, models.DeployApp):
                     parsed_cls = cls.REGISTERED_DEPLOYMENT_PATH_MODELS.get(
-                        parsed_kwargs["actionParams"].deployment.deploymentPath, parsed_cls)
+                        parsed_kwargs["actionParams"].deployment.deploymentPath,
+                        parsed_cls,
+                    )
 
                 parsed_obj = parsed_cls(**parsed_kwargs)
 
@@ -76,7 +78,11 @@ class PrepareSandboxInfraRequestActions(BaseRequestActions):
 
     @property
     def prepare_private_subnets(self):
-        return [subnet_action for subnet_action in self.prepare_subnets if subnet_action.is_private()]
+        return [
+            subnet_action
+            for subnet_action in self.prepare_subnets
+            if subnet_action.is_private()
+        ]
 
     @classmethod
     def from_request(cls, request):
@@ -107,7 +113,9 @@ class DeployVMRequestActions(BaseRequestActions):
         :param deployment_path_cls:
         :return:
         """
-        cls.REGISTERED_DEPLOYMENT_PATH_MODELS[deployment_path_cls.DEPLOYMENT_PATH] = deployment_path_cls
+        cls.REGISTERED_DEPLOYMENT_PATH_MODELS[
+            deployment_path_cls.DEPLOYMENT_PATH
+        ] = deployment_path_cls
 
     @classmethod
     def from_request(cls, request):
