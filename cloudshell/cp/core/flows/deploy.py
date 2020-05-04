@@ -1,4 +1,4 @@
-from cloudshell.cp.core.models import DriverResponse, DeployAppResult
+from cloudshell.cp.core.models import DeployAppResult, DriverResponse
 
 
 class AbstractDeployVMFlow:
@@ -18,7 +18,9 @@ class AbstractDeployVMFlow:
         :return:
         :rtype: tuple[str, str, dict, dict]
         """
-        raise NotImplementedError(f"Class {type(self)} must implement method 'deploy_vm'")
+        raise NotImplementedError(
+            f"Class {type(self)} must implement method 'deploy_vm'"
+        )
 
     def _deploy_vm(self, action):
         """
@@ -26,12 +28,16 @@ class AbstractDeployVMFlow:
         :param cloudshell.cp.core.models.PrepareCloudInfra action:
         :return:
         """
-        vm_uuid, vm_name, vm_details_data, deployedAppAdditionalData = self.deploy_vm(action)
-        return DeployAppResult(action.actionId,
-                               vmUuid="",
-                               vmName="",
-                               vmDetailsData=None,
-                               deployedAppAdditionalData={})
+        vm_uuid, vm_name, vm_details_data, deployedAppAdditionalData = self.deploy_vm(
+            action
+        )
+        return DeployAppResult(
+            action.actionId,
+            vmUuid="",
+            vmName="",
+            vmDetailsData=None,
+            deployedAppAdditionalData={},
+        )
 
     def deploy(self, request_actions):
         """

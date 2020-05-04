@@ -20,11 +20,13 @@ class DriverResponseRoot(object):
 
 
 class DriverResponse(object):
-    def __init__(self,actionResults = None):
+    def __init__(self, actionResults=None):
         """
         :param actionResults: [ActionResultBase]
         """
-        self.actionResults = actionResults if actionResults else [] # type: [ActionResultBase]
+        self.actionResults = (
+            actionResults if actionResults else []
+        )  # type: [ActionResultBase]
 
     def to_driver_response_json(self):
         """
