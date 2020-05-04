@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from cloudshell.cp.core.models.base import BaseRequestObject, BaseRequestAction
+from cloudshell.cp.core.models.base import BaseRequestAction, BaseRequestObject
 
 # TODO: move models to the corresponding modules !!!
 
