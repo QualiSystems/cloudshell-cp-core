@@ -35,23 +35,40 @@ class DeployApp(BaseRequestAction):
                 self.actionParams.deployment.attributes,
             ]
         ):
-
             self.attributes[attr.attributeName] = attr.attributeValue
+
+        self._cs_api = None
+        self._password = None
+
+    def set_cloudshell_api(self, api):
+        """
+
+        :param cloudshell.api.cloudshell_api.CloudShellAPISession api:
+        :return:
+        """
+        self._cs_api = api
+
+    def _decrypt_password(self, password):
+        """Decrypt CloudShell password
+
+        :param  password:
+        :return:
+        """
+        if self._cs_api is None:
+            raise Exception("Cannot decrypt password, CloudShell API is not defined")
+
+        return self._cs_api.DecryptPassword(password).Value
 
     @property
     def user(self):
-        return ""
-        # return self.attributes.get("User")
+        return self.attributes.get("User")
 
     @property
     def password(self):
-        # todo: FiX THIS !!!!!!!! devrypt password by providing CS API here ?????!!!
-        return ""
-        # return self.attributes.get("Password")
+        if self._password is None:
+            self._password = self._decrypt_password(password=self.attributes.get("Password"))
 
-    @property
-    def encrypted_password(self):
-        return self.attributes.get("Password")
+        return self._password
 
     @property
     def public_ip(self):

@@ -8,9 +8,9 @@ class BaseRequestActions:
     REGISTERED_DEPLOYMENT_PATH_MODELS = {}
 
     @classmethod
-    def from_request(cls, request):
+    def from_request(cls, request, cs_api=None):
         request = json.loads(request)
-        actions = cls._parse(data=request["driverRequest"].get("actions", []))
+        actions = cls._parse(data=request["driverRequest"].get("actions", []), cs_api=cs_api)
         return cls()
 
     @classmethod
@@ -23,7 +23,7 @@ class BaseRequestActions:
         return class_name[0].upper() + class_name[1:]
 
     @classmethod
-    def _parse(cls, data):
+    def _parse(cls, data, cs_api=None):
         """
 
         :param data:
@@ -32,14 +32,14 @@ class BaseRequestActions:
         if isinstance(data, list):
             parsed_data = []
             for nested_data in data:
-                parsed_data.append(cls._parse(nested_data))
+                parsed_data.append(cls._parse(data=nested_data, cs_api=cs_api))
 
             return parsed_data
 
         elif isinstance(data, dict):
             try:
                 class_name = cls._normalize_class_name(data.pop("type"))
-                parsed_kwargs = cls._parse(data)
+                parsed_kwargs = cls._parse(data=data, cs_api=cs_api)
                 parsed_cls = getattr(models, class_name)
 
                 if issubclass(parsed_cls, models.DeployApp):
@@ -47,8 +47,10 @@ class BaseRequestActions:
                         parsed_kwargs["actionParams"].deployment.deploymentPath,
                         parsed_cls,
                     )
-
-                parsed_obj = parsed_cls(**parsed_kwargs)
+                    parsed_obj = parsed_cls(**parsed_kwargs)
+                    parsed_obj.set_cloudshell_api(api=cs_api)
+                else:
+                    parsed_obj = parsed_cls(**parsed_kwargs)
 
                 return parsed_obj
 
@@ -56,7 +58,7 @@ class BaseRequestActions:
                 parsed_params = {}
 
                 for param_key, param in data.items():
-                    parsed_params[param_key] = cls._parse(param)
+                    parsed_params[param_key] = cls._parse(data=param, cs_api=cs_api)
 
                 return parsed_params
 
@@ -85,7 +87,7 @@ class PrepareSandboxInfraRequestActions(BaseRequestActions):
         ]
 
     @classmethod
-    def from_request(cls, request):
+    def from_request(cls, request, cs_api=None):
         request = json.loads(request)
         actions = cls._parse(data=request["driverRequest"].get("actions", []))
         obj = cls()
@@ -118,9 +120,9 @@ class DeployVMRequestActions(BaseRequestActions):
         ] = deployment_path_cls
 
     @classmethod
-    def from_request(cls, request):
+    def from_request(cls, request, cs_api=None):
         request = json.loads(request)
-        actions = cls._parse(data=request["driverRequest"].get("actions", []))
+        actions = cls._parse(data=request["driverRequest"].get("actions", []), cs_api=cs_api)
         obj = cls()
 
         for action in actions:
