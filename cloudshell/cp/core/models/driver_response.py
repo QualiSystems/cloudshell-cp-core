@@ -2,7 +2,7 @@ import json
 
 
 # todo: refactor this !!!!
-class DriverResponseRoot(object):
+class DriverResponseRoot:
     def __init__(self, driverResponse=None):
         """
         :param driverResponse:  DriverResponse
@@ -19,7 +19,7 @@ class DriverResponseRoot(object):
         return json.dumps(self, default=self._default_json_dump)
 
 
-class DriverResponse(object):
+class DriverResponse:
     def __init__(self, actionResults=None):
         """
         :param actionResults: [ActionResultBase]
