@@ -15,7 +15,7 @@ class BaseActionResult(BaseRequestAction):
 
 
 @dataclass
-class VmDetailsData(object):
+class VmDetailsData:
     vmInstanceData: list = field(default_factory=list)
     vmNetworkData: list = field(default_factory=list)
     appName: str = ""
