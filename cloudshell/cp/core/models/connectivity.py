@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 from cloudshell.cp.core.models.base import BaseRequestAction, BaseRequestObject
 
@@ -19,6 +20,14 @@ class ActionTarget(BaseRequestObject):
 @dataclass
 class BaseConnectivityAction(BaseRequestAction):
     actionTarget: ActionTarget = None
+    actionParams: Any = None
+
+    def is_private(self):
+        public = True
+        if self.actionParams.subnetServiceAttributes is not None:
+            public = self.actionParams.subnetServiceAttributes.get("Public", public)
+
+        return public is False
 
 
 @dataclass
@@ -31,7 +40,7 @@ class BaseConnectivityVlanAction(BaseConnectivityAction):
 
 @dataclass
 class CleanupNetwork(BaseConnectivityAction):
-    pass
+    customActionAttributes: list = field(default_factory=list)
 
 
 @dataclass
@@ -56,6 +65,3 @@ class ConnectToSubnetParams(BaseRequestObject):
 @dataclass
 class ConnectSubnet(BaseConnectivityAction):
     actionParams: ConnectToSubnetParams = None
-
-    def is_private(self):
-        return self.actionParams.subnetServiceAttributes.get("Public", True) is False
