@@ -9,10 +9,29 @@ class ReservationInfo:
     domain: str
 
     @classmethod
-    def from_context(cls, context):
+    def _from_reservation_context(cls, reservation):
         return cls(
-            reservation_id=context.reservation_id,
-            owner=context.owner_user,
-            blueprint=context.environment_name,
-            domain=context.domain,
+            reservation_id=reservation.reservation_id,
+            owner=reservation.owner_user,
+            blueprint=reservation.environment_name,
+            domain=reservation.domain,
         )
+
+    @classmethod
+    def from_resource_context(cls, context):
+        """
+
+        :param context:
+        :return:
+        """
+        return cls._from_reservation_context(reservation=context.reservation)
+
+    @classmethod
+    def from_remote_resource_context(cls, context):
+        """
+
+        :param context:
+        :return:
+        """
+        return cls._from_reservation_context(reservation=context.remote_reservation)
+
