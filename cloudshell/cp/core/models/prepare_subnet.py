@@ -16,8 +16,5 @@ class PrepareSubnetParams(BaseRequestObject):
 class PrepareSubnet(BaseConnectivityAction):
     actionParams: PrepareSubnetParams = None
 
-    def is_private(self):
-        return self.actionParams.subnetServiceAttributes.get("Public", True) is False
-
     def get_cidr(self):
         return self.actionParams.cidr
