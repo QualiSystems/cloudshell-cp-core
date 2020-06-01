@@ -1,7 +1,7 @@
-from cloudshell.cp.core.models import DeployAppResult, DriverResponse
+from cloudshell.cp.core.models import DriverResponse
 
 
-class AbstractDeployVMFlow:
+class AbstractDeployFlow:
     def __init__(self, resource_config, logger):
         """
 
@@ -11,32 +11,14 @@ class AbstractDeployVMFlow:
         self._resource_config = resource_config
         self._logger = logger
 
-    def deploy_vm(self, action):
+    def _deploy(self, request_actions):
         """
 
-        :param cloudshell.cp.core.models.DeployApp action:
-        :return:
-        :rtype: tuple[str, str, dict, dict]
+        :param CleanupSandboxInfraRequestActions request_actions:
+        :rtype: cloudshell.cp.core.models.DeployAppResult
         """
         raise NotImplementedError(
-            f"Class {type(self)} must implement method 'deploy_vm'"
-        )
-
-    def _deploy_vm(self, action):
-        """
-
-        :param cloudshell.cp.core.models.PrepareCloudInfra action:
-        :return:
-        """
-        vm_uuid, vm_name, vm_details_data, deployedAppAdditionalData = self.deploy_vm(
-            action
-        )
-        return DeployAppResult(
-            action.actionId,
-            vmUuid="",
-            vmName="",
-            vmDetailsData=None,
-            deployedAppAdditionalData={},
+            f"Class {type(self)} must implement method '_deploy'"
         )
 
     def deploy(self, request_actions):
@@ -45,5 +27,8 @@ class AbstractDeployVMFlow:
         :param cloudshell.cp.core.driver_request_parser.RequestActions request_actions:
         :return:
         """
-        deploy_result = self._deploy_vm(request_actions)
-        return DriverResponse([deploy_result]).to_driver_response_json()
+        deploy_app_result = self._deploy(
+            request_actions=request_actions
+        )
+
+        return DriverResponse([deploy_app_result]).to_driver_response_json()
