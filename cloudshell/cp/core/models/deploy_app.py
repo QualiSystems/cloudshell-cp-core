@@ -29,12 +29,8 @@ class DeployApp(BaseRequestAction):
     attributes: dict = field(default_factory=dict)
 
     def __post_init__(self):
-        for attr in itertools.chain(
-            *[
-                self.actionParams.appResource.attributes,
-                self.actionParams.deployment.attributes,
-            ]
-        ):
+        for attr in itertools.chain(self.actionParams.appResource.attributes,
+                                    self.actionParams.deployment.attributes):
             self.attributes[attr.attributeName] = attr.attributeValue
 
         self._cs_api = None

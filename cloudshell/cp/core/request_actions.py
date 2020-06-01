@@ -1,3 +1,4 @@
+import itertools
 import json
 from dataclasses import dataclass, field
 
@@ -175,6 +176,10 @@ class DeployedApp:
         return self.attributes["Password"]
 
     @property
+    def allow_all_sandbox_traffic(self):
+        return self.attributes[f"{self.deployment_service_model}.AllowallSandboxTraffic"].lower() == "true"
+
+    @property
     def public_ip(self):
         return self.attributes[self.PUBLIC_IP_KEY]
 
@@ -186,8 +191,9 @@ class DeployedApp:
         :param dict deployed_app_data:
         :return:
         """
-        attributes = {attr["name"]: attr["value"]
-                      for attr in deployed_app_data["attributes"]}
+        attributes = {attr["name"]: attr["value"] for attr in itertools.chain(
+            deployed_app_data["attributes"],
+            app_request_data['deploymentService']['attributes'])}
 
         return cls(name=deployed_app_data["name"],
                    deployment_service_model=app_request_data["deploymentService"]["model"],
