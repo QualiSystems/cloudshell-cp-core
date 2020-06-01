@@ -59,7 +59,7 @@ class PrepareCloudInfraResult(BaseActionResult):
 @dataclass
 class PrepareSubnetActionResult(BaseActionResult):
     type: str = "PrepareSubnet"
-    subnet_id: str = ""
+    subnetId: str = ""
 
 
 @dataclass

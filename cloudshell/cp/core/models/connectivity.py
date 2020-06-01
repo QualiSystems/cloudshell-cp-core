@@ -22,13 +22,6 @@ class BaseConnectivityAction(BaseRequestAction):
     actionTarget: ActionTarget = None
     actionParams: Any = None
 
-    def is_private(self):
-        public = True
-        if self.actionParams.subnetServiceAttributes is not None:
-            public = self.actionParams.subnetServiceAttributes.get("Public", public)
-
-        return public is False
-
 
 @dataclass
 class BaseConnectivityVlanAction(BaseConnectivityAction):
@@ -58,10 +51,21 @@ class ConnectToSubnetParams(BaseRequestObject):
     cidr: str = ""
     subnetId: str = ""
     isPublic: bool = True
-    subnetServiceAttributes: dict = field(default_factory=dict)
+    subnetServiceAttributes: list = field(default_factory=list)
     vnicName: str = ""
 
 
 @dataclass
 class ConnectSubnet(BaseConnectivityAction):
     actionParams: ConnectToSubnetParams = None
+
+    def is_public(self):
+        return self.actionParams.isPublic
+
+    @property
+    def subnet_id(self):
+        return self.actionParams.subnetId
+
+    @property
+    def device_index(self):
+        return int(self.actionParams.vnicName)

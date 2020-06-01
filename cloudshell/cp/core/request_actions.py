@@ -131,6 +131,8 @@ class DeployVMRequestActions(BaseRequestActions):
             elif isinstance(actions, models.ConnectSubnet):
                 obj.connect_subnets.append(action)
 
+        obj.connect_subnets.sort(key=lambda x: x.device_index)
+
         return obj
 
 
@@ -170,7 +172,6 @@ class DeployedApp:
 
     @property
     def password(self):
-        # todo: provide API and decode!!!!!
         return self.attributes["Password"]
 
     @property
