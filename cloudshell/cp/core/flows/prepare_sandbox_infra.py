@@ -1,12 +1,9 @@
-from threading import Thread
+import concurrent
 
 from cloudshell.cp.core.models import (
-    CreateKeys,
     CreateKeysActionResult,
     DriverResponse,
-    PrepareCloudInfra,
     PrepareCloudInfraResult,
-    PrepareSubnet,
     PrepareSubnetActionResult,
 )
 
@@ -35,7 +32,8 @@ class AbstractPrepareSandboxInfraFlow:
         """
 
         :param PrepareSandboxInfraRequestActions request_actions:
-        :return:
+        :return dictionary PrepareSubnet.actionId: subnet_id
+        :rtype: dict[str, str]
         """
         raise NotImplementedError(
             f"Class {type(self)} must implement method 'prepare_subnet'"
@@ -51,6 +49,14 @@ class AbstractPrepareSandboxInfraFlow:
         raise NotImplementedError(
             f"Class {type(self)} must implement method 'create_ssh_keys'"
         )
+
+    def prepare_common_objects(self, request_actions):
+        """
+
+        :param request_actions:
+        :return:
+        """
+        pass
 
     def _prepare_cloud_infra(self, request_actions):
         """
@@ -69,9 +75,10 @@ class AbstractPrepareSandboxInfraFlow:
         :param PrepareSandboxInfraRequestActions request_actions:
         :return:
         """
-        self.prepare_subnets(request_actions)
+        subnet_ids = self.prepare_subnets(request_actions)
+
         return [
-            PrepareSubnetActionResult(actionId=action.actionId)
+            PrepareSubnetActionResult(actionId=action.actionId, subnetId=subnet_ids.get(action.actionId))
             for action in request_actions.prepare_subnets
         ]
 
@@ -92,19 +99,19 @@ class AbstractPrepareSandboxInfraFlow:
         :param cloudshell.cp.core.driver_request_parser.RequestActions request_actions:
         :return:
         """
-        prep_network_action_result = self._prepare_cloud_infra(
-            request_actions=request_actions
-        )
-        prep_subnet_action_result = self._prepare_subnets(
-            request_actions=request_actions
-        )
-        access_keys_action_results = self._create_ssh_keys(
-            request_actions=request_actions
-        )
+        self.prepare_common_objects(request_actions=request_actions)
 
-        action_results = [
-            prep_network_action_result,
-            prep_subnet_action_result,
-            access_keys_action_results,
-        ]
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            prepare_cloud_infra_task = executor.submit(self._prepare_cloud_infra, request_actions=request_actions)
+            prepare_subnets_task = executor.submit(self._prepare_subnets, request_actions=request_actions)
+            create_ssh_keys_task = executor.submit(self._create_ssh_keys, request_actions=request_actions)
+
+            concurrent.futures.wait([prepare_cloud_infra_task, prepare_subnets_task, create_ssh_keys_task])
+
+            action_results = [
+                prepare_cloud_infra_task.result(),
+                create_ssh_keys_task.result(),
+                *prepare_subnets_task.result(),
+            ]
+
         return DriverResponse(action_results).to_driver_response_json()
