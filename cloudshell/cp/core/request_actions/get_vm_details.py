@@ -10,6 +10,11 @@ class GetVMDetailsRequestActions:
 
     @classmethod
     def from_request(cls, request):
+        """Create GetVMDetailsRequestActions object from the string request.
+
+        :param str request:
+        :rtype: GetVMDetailsRequestActions
+        """
         data = json.loads(request)
         deployed_apps = []
         for item in data["items"]:

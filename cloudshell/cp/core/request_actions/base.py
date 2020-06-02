@@ -8,10 +8,10 @@ class BaseRequestActions:
 
     @classmethod
     def _parse_request_actions(cls, request, cs_api):
-        """
+        """Parse driver request actions.
 
-        :param request:
-        :param cs_api:
+        :param str request:
+        :param cloudshell.api.cloudshell_api.CloudShellAPISession cs_api:
         :return:
         """
         request = json.loads(request)
@@ -21,30 +21,30 @@ class BaseRequestActions:
 
     @classmethod
     def from_request(cls, request, cs_api=None):
-        """
+        """Create BaseRequestActions object from the string request.
 
-        :param request:
-        :param cs_api:
-        :return:
+        :param str request:
+        :param cloudshell.api.cloudshell_api.CloudShellAPISession cs_api:
+        :rtype: BaseRequestActions
         """
-        actions = cls._parse_request_actions(request=request, cs_api=cs_api)
         return cls()
 
     @classmethod
     def _normalize_class_name(cls, class_name):
-        """
+        """Change class name to the valid camel case format.
 
         :param str class_name:
-        :return:
+        :rtype: str
         """
         return class_name[0].upper() + class_name[1:]
 
     @classmethod
     def _parse(cls, data, cs_api=None):
-        """
+        """Parse data into the corresponding models.
 
-        :param data:
-        :return:
+        :param Any data:
+        :param cloudshell.api.cloudshell_api.CloudShellAPISession cs_api:
+        :rtype: Any
         """
         if isinstance(data, list):
             parsed_data = []

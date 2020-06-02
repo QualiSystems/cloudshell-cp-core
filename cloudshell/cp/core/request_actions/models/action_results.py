@@ -5,7 +5,7 @@ from .base import BaseRequestAction, BaseRequestObject
 
 @dataclass
 class BaseActionResult(BaseRequestAction):
-    type: str = ""
+    type: str = ""  # noqa: A003
     actionId: str = ""
     success: bool = True
     infoMessage: str = ""
@@ -22,7 +22,7 @@ class VmDetailsData:
 
 @dataclass
 class DeployAppResult(BaseActionResult):
-    type: str = "DeployApp"
+    type: str = "DeployApp"  # noqa: A003
     vmUuid: str = ""
     vmName: str = ""
     deployedAppAddress: str = ""
@@ -51,30 +51,30 @@ class VmDetailsNetworkInterface(BaseRequestObject):
 
 @dataclass
 class PrepareCloudInfraResult(BaseActionResult):
-    type: str = "PrepareNetwork"
+    type: str = "PrepareNetwork"  # noqa: A003
 
 
 @dataclass
 class PrepareSubnetActionResult(BaseActionResult):
-    type: str = "PrepareSubnet"
+    type: str = "PrepareSubnet"  # noqa: A003
     subnetId: str = ""
 
 
 @dataclass
 class ConnectToSubnetActionResult(BaseActionResult):
-    type: str = "ConnectToSubnet"
+    type: str = "ConnectToSubnet"  # noqa: A003
     interface: str = ""
 
 
 @dataclass
 class CreateKeysActionResult(BaseActionResult):
-    type: str = "CreateKeys"
+    type: str = "CreateKeys"  # noqa: A003
     accessKey: str = ""
 
 
 @dataclass
 class SetAppSecurityGroupActionResult(BaseActionResult):
-    type: str = "SetAppSecurityGroup"
+    type: str = "SetAppSecurityGroup"  # noqa: A003
 
 
 @dataclass
@@ -86,29 +86,29 @@ class SaveAppResult(BaseActionResult):
 
 @dataclass
 class SetVlanResult(BaseActionResult):
-    type: str = "setVlan"
+    type: str = "setVlan"  # noqa: A003
     updatedInterface: str = ""
 
 
 @dataclass
 class RemoveVlanResult(BaseActionResult):
-    type: str = "removeVlan"
+    type: str = "removeVlan"  # noqa: A003
 
 
 @dataclass
 class CleanupNetworkResult(BaseActionResult):
-    type: str = "CleanupNetwork"
+    type: str = "CleanupNetwork"  # noqa: A003
 
 
 @dataclass
 class TrafficMirroringResult(BaseActionResult):
-    type: str = "CreateTrafficMirroring"
+    type: str = "CreateTrafficMirroring"  # noqa: A003
     sessionId: str = ""
 
 
 @dataclass
 class RemoveTrafficMirroringResult(BaseActionResult):
-    type: str = "RemoveTrafficMirroring"
+    type: str = "RemoveTrafficMirroring"  # noqa: A003
 
 
 @dataclass

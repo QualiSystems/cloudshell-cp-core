@@ -2,30 +2,28 @@ import jsonpickle as jsonpickle
 
 
 class AbstractVMDetailsFlow:
-    def __init__(self, resource_config, logger):
-        """
+    def __init__(self, logger):
+        """Init command.
 
-        :param resource_config:
-        :param logger:
+        :param logging.Logger logger:
         """
-        self._resource_config = resource_config
         self._logger = logger
 
     def _get_vm_details(self, deployed_app):
-        """
+        """Get VM Details.
 
         :param cloudshell.cp.core.request_actions.DeployedApp deployed_app:
-        :rtype: cloudshell.cp.core.models.VmDetailsData
+        :rtype: cloudshell.cp.core.request_actions.models.VmDetailsData
         """
         raise NotImplementedError(
             f"Class {type(self)} must implement method '_get_vm_details'"
         )
 
     def get_vm_details(self, request_actions):
-        """
+        """Get VM Details.
 
-        :param cloudshell.cp.core.driver_request_parser.RequestActions request_actions:
-        :return:
+        :param cloudshell.cp.core.request_actions.GetVMDetailsRequestActions request_actions:  # noqa: E501
+        :rtype: str
         """
         results = []
 
