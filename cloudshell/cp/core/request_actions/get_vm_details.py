@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass, field
 
-from cloudshell.cp.core.requests.actions.deployed_app import DeployedApp
+from cloudshell.cp.core.request_actions.deployed_app import DeployedApp
 
 
 @dataclass

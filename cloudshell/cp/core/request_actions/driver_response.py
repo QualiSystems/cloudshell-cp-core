@@ -3,11 +3,12 @@ import json
 
 # todo: refactor this !!!!
 class DriverResponseRoot:
-    def __init__(self, driverResponse=None):
+    def __init__(self, driver_response=None):
         """
-        :param driverResponse:  DriverResponse
+
+        :param driver_response:
         """
-        self.driverResponse = driverResponse
+        self.driverResponse = driver_response
 
     def _default_json_dump(self, obj):
         if isinstance(obj, bytes):
@@ -20,17 +21,16 @@ class DriverResponseRoot:
 
 
 class DriverResponse:
-    def __init__(self, actionResults=None):
+    def __init__(self, action_results=None):
         """
-        :param actionResults: [ActionResultBase]
+
+        :param action_results:
         """
-        self.actionResults = (
-            actionResults if actionResults else []
-        )  # type: [ActionResultBase]
+        self.action_results = action_results or []
 
     def to_driver_response_json(self):
         """
         Wrap this object with DriverResponseRoot and converts it to json.
         :return:
         """
-        return DriverResponseRoot(driverResponse=self).to_json()
+        return DriverResponseRoot(driver_response=self).to_json()

@@ -1,8 +1,7 @@
-import json
 from dataclasses import dataclass
 
-from cloudshell.cp.core.requests import models
-from cloudshell.cp.core.requests.actions.base import BaseRequestActions
+from cloudshell.cp.core.request_actions import models
+from cloudshell.cp.core.request_actions.base import BaseRequestActions
 
 
 @dataclass
