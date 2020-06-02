@@ -26,7 +26,7 @@ class DriverResponse:
 
         :param action_results:
         """
-        self.action_results = action_results or []
+        self.actionResults = action_results or []
 
     def to_driver_response_json(self):
         """Converts action results to the json.
