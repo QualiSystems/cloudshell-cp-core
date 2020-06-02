@@ -17,10 +17,12 @@ class VMDetails:
         :param data:
         :return:
         """
-        return cls(id=data["id"],
-                   cloud_provider_id=data["cloudProviderId"],
-                   uid=data["uid"],
-                   vm_custom_params=data["vmCustomParams"])
+        return cls(
+            id=data["id"],
+            cloud_provider_id=data["cloudProviderId"],
+            uid=data["uid"],
+            vm_custom_params=data["vmCustomParams"],
+        )
 
 
 @dataclass
@@ -43,7 +45,12 @@ class DeployedApp:
 
     @property
     def allow_all_sandbox_traffic(self):
-        return self.attributes[f"{self.deployment_service_model}.AllowallSandboxTraffic"].lower() == "true"
+        return (
+            self.attributes[
+                f"{self.deployment_service_model}.AllowallSandboxTraffic"
+            ].lower()
+            == "true"
+        )
 
     @property
     def public_ip(self):
@@ -57,15 +64,21 @@ class DeployedApp:
         :param dict deployed_app_data:
         :return:
         """
-        attributes = {attr["name"]: attr["value"] for attr in itertools.chain(
-            deployed_app_data["attributes"],
-            app_request_data['deploymentService']['attributes'])}
+        attributes = {
+            attr["name"]: attr["value"]
+            for attr in itertools.chain(
+                deployed_app_data["attributes"],
+                app_request_data["deploymentService"]["attributes"],
+            )
+        }
 
-        return cls(name=deployed_app_data["name"],
-                   deployment_service_model=app_request_data["deploymentService"]["model"],
-                   private_ip=deployed_app_data["address"],
-                   attributes=attributes,
-                   vmdetails=VMDetails.from_dict(deployed_app_data["vmdetails"]))
+        return cls(
+            name=deployed_app_data["name"],
+            deployment_service_model=app_request_data["deploymentService"]["model"],
+            private_ip=deployed_app_data["address"],
+            attributes=attributes,
+            vmdetails=VMDetails.from_dict(deployed_app_data["vmdetails"]),
+        )
 
     @classmethod
     def from_remote_resource(cls, resource):
@@ -74,5 +87,7 @@ class DeployedApp:
         :param resource:
         :return:
         """
-        return cls.from_data(app_request_data=json.loads(resource.app_context.app_request_json),
-                             deployed_app_data=json.loads(resource.app_context.deployed_app_json))
+        return cls.from_data(
+            app_request_data=json.loads(resource.app_context.app_request_json),
+            deployed_app_data=json.loads(resource.app_context.deployed_app_json),
+        )

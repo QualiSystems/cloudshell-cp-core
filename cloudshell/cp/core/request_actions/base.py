@@ -15,7 +15,9 @@ class BaseRequestActions:
         :return:
         """
         request = json.loads(request)
-        return cls._parse(data=request["driverRequest"].get("actions", []), cs_api=cs_api)
+        return cls._parse(
+            data=request["driverRequest"].get("actions", []), cs_api=cs_api
+        )
 
     @classmethod
     def from_request(cls, request, cs_api=None):
@@ -66,8 +68,7 @@ class BaseRequestActions:
 
             if issubclass(parsed_cls, models.DeployApp):
                 parsed_cls = cls.REGISTERED_DEPLOYMENT_PATH_MODELS.get(
-                    parsed_kwargs["actionParams"].deployment.deploymentPath,
-                    parsed_cls,
+                    parsed_kwargs["actionParams"].deployment.deploymentPath, parsed_cls
                 )
                 parsed_obj = parsed_cls(**parsed_kwargs)
                 parsed_obj.set_cloudshell_api(api=cs_api)
