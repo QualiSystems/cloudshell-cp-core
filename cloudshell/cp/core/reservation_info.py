@@ -34,4 +34,3 @@ class ReservationInfo:
         :return:
         """
         return cls._from_reservation_context(reservation=context.remote_reservation)
-
