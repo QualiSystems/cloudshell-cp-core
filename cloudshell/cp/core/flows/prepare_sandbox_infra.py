@@ -1,8 +1,8 @@
 import concurrent
 
-from cloudshell.cp.core.requests.models import (
+from cloudshell.cp.core.request_actions import DriverResponse
+from cloudshell.cp.core.request_actions.models import (
     CreateKeysActionResult,
-    DriverResponse,
     PrepareCloudInfraResult,
     PrepareSubnetActionResult,
 )
@@ -96,9 +96,9 @@ class AbstractPrepareSandboxInfraFlow:
         return CreateKeysActionResult(actionId=action.actionId, accessKey=access_key)
 
     def prepare(self, request_actions):
-        """
+        """ss
 
-        :param cloudshell.cp.core.driver_request_parser.RequestActions request_actions:
+        :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
         :return:
         """
         self.prepare_common_objects(request_actions=request_actions)

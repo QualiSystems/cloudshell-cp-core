@@ -18,6 +18,3 @@ class Attribute(BaseRequestObject):
 @dataclass
 class BaseRequestAction(BaseRequestObject):
     actionId: str = ""
-
-
-# todo: log all requests with DEBUG mode (in driver file) !!!! it will be very helpfull !!!
