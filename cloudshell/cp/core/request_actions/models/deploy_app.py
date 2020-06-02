@@ -25,6 +25,8 @@ class DeployAppParams(BaseRequestObject):
 
 @dataclass
 class DeployApp(BaseRequestAction):
+    DEPLOYMENT_PATH = ""
+
     actionParams: DeployAppParams = None
     attributes: dict = field(default_factory=dict)
 
@@ -39,7 +41,7 @@ class DeployApp(BaseRequestAction):
         self._password = None
 
     def set_cloudshell_api(self, api):
-        """Set CloudShell API
+        """Set CloudShell API.
 
         :param cloudshell.api.cloudshell_api.CloudShellAPISession api:
         :return:
@@ -47,10 +49,10 @@ class DeployApp(BaseRequestAction):
         self._cs_api = api
 
     def _decrypt_password(self, password):
-        """Decrypt CloudShell password
+        """Decrypt CloudShell password.
 
-        :param  password:
-        :return:
+        :param str password:
+        :rtype: str
         """
         if self._cs_api is None:
             raise Exception("Cannot decrypt password, CloudShell API is not defined")
@@ -73,8 +75,3 @@ class DeployApp(BaseRequestAction):
     @property
     def public_ip(self):
         return self.attributes.get("Public IP")
-
-
-# TODO: request_actions.deploy_app.actionParams.deployment.customModel !!!!!! handle this
-#  ! seems that it is case when we have custom deployed app (like we have for the TeraVM and etc)
-#  test with both TVM 1st and 2nd gen !!!!

@@ -3,19 +3,17 @@ from cloudshell.cp.core.request_actions.models import CleanupNetworkResult
 
 
 class AbstractCleanupSandboxInfraFlow:
-    def __init__(self, resource_config, logger):
-        """
+    def __init__(self, logger):
+        """Init command.
 
-        :param resource_config:
         :param logger:
         """
-        self._resource_config = resource_config
         self._logger = logger
 
     def cleanup_sandbox_infra(self, request_actions):
-        """
+        """Cleanup Sandbox Infra.
 
-        :param CleanupSandboxInfraRequestActions request_actions:
+        :param cloudshell.cp.core.request_actions.CleanupSandboxInfraRequestActions request_actions:  # noqa: E501
         :return:
         """
         raise NotImplementedError(
@@ -23,10 +21,10 @@ class AbstractCleanupSandboxInfraFlow:
         )
 
     def _cleanup_sandbox_infra(self, request_actions):
-        """
+        """Cleanup Sandbox Infra.
 
-        :param PrepareSandboxInfraRequestActions request_actions:
-        :return:
+        :param cloudshell.cp.core.request_actions.CleanupSandboxInfraRequestActions request_actions:  # noqa: E501
+        :rtype: cloudshell.cp.core.request_actions.models.CleanupNetworkResult
         """
         action = request_actions.cleanup_network
         self.cleanup_sandbox_infra(request_actions)
@@ -34,10 +32,10 @@ class AbstractCleanupSandboxInfraFlow:
         return CleanupNetworkResult(actionId=action.actionId)
 
     def cleanup(self, request_actions):
-        """
+        """Cleanup Sandbox Infra.
 
-        :param cloudshell.cp.core.driver_request_parser.RequestActions request_actions:
-        :return:
+        :param cloudshell.cp.core.request_actions.CleanupSandboxInfraRequestActions request_actions:  # noqa: E501
+        :rtype: str
         """
         cleanup_sandbox_infra_result = self._cleanup_sandbox_infra(
             request_actions=request_actions

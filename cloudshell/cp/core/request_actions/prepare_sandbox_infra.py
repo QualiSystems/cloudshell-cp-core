@@ -24,11 +24,11 @@ class PrepareSandboxInfraRequestActions(BaseRequestActions):
 
     @classmethod
     def from_request(cls, request, cs_api=None):
-        """
+        """Create PrepareSandboxInfraRequestActions object from the string request.
 
-        :param request:
-        :param cs_api:
-        :return:
+        :param str request:
+        :param cloudshell.api.cloudshell_api.CloudShellAPISession cs_api:
+        :rtype: PrepareSandboxInfraRequestActions
         """
         actions = cls._parse_request_actions(request=request, cs_api=cs_api)
         obj = cls()
