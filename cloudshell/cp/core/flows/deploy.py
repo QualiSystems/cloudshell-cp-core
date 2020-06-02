@@ -1,4 +1,4 @@
-from cloudshell.cp.core.requests.models import DriverResponse
+from cloudshell.cp.core.request_actions import DriverResponse
 
 
 class AbstractDeployFlow:

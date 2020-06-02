@@ -23,9 +23,10 @@ setup(
     test_suite="nose.collector",
     version=version_from_file,
     description=(
-        "A repository for projects providing out of the box capabilities within CloudShell to parse and "
-        "convert cloushell driver request to well defined python objects."
-        "One cloudshell-cp-core For All cloudshell cloud provider shells."
+        "A repository for projects providing out of the box capabilities within "
+        "CloudShell to parse and convert cloushell driver request to well defined "
+        "python objects. One cloudshell-cp-core For All cloudshell cloud provider "
+        "shells."
     ),
     keywords="sandbox cloudshell json request",
     include_package_data=True,

@@ -1,7 +1,7 @@
 import itertools
 from dataclasses import dataclass, field
 
-from cloudshell.cp.core.requests.models import BaseRequestAction, BaseRequestObject
+from .base import BaseRequestAction, BaseRequestObject
 
 
 @dataclass
@@ -39,7 +39,7 @@ class DeployApp(BaseRequestAction):
         self._password = None
 
     def set_cloudshell_api(self, api):
-        """
+        """Set CloudShell API
 
         :param cloudshell.api.cloudshell_api.CloudShellAPISession api:
         :return:

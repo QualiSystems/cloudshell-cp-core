@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from cloudshell.cp.core.requests.models import BaseRequestAction, BaseRequestObject
+from .base import BaseRequestAction, BaseRequestObject
 
 
 @dataclass
