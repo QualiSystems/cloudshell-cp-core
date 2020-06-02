@@ -78,7 +78,9 @@ class AbstractPrepareSandboxInfraFlow:
         subnet_ids = self.prepare_subnets(request_actions)
 
         return [
-            PrepareSubnetActionResult(actionId=action.actionId, subnetId=subnet_ids.get(action.actionId))
+            PrepareSubnetActionResult(
+                actionId=action.actionId, subnetId=subnet_ids.get(action.actionId)
+            )
             for action in request_actions.prepare_subnets
         ]
 
@@ -102,11 +104,19 @@ class AbstractPrepareSandboxInfraFlow:
         self.prepare_common_objects(request_actions=request_actions)
 
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            prepare_cloud_infra_task = executor.submit(self._prepare_cloud_infra, request_actions=request_actions)
-            prepare_subnets_task = executor.submit(self._prepare_subnets, request_actions=request_actions)
-            create_ssh_keys_task = executor.submit(self._create_ssh_keys, request_actions=request_actions)
+            prepare_cloud_infra_task = executor.submit(
+                self._prepare_cloud_infra, request_actions=request_actions
+            )
+            prepare_subnets_task = executor.submit(
+                self._prepare_subnets, request_actions=request_actions
+            )
+            create_ssh_keys_task = executor.submit(
+                self._create_ssh_keys, request_actions=request_actions
+            )
 
-            concurrent.futures.wait([prepare_cloud_infra_task, prepare_subnets_task, create_ssh_keys_task])
+            concurrent.futures.wait(
+                [prepare_cloud_infra_task, prepare_subnets_task, create_ssh_keys_task]
+            )
 
             action_results = [
                 prepare_cloud_infra_task.result(),

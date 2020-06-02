@@ -28,5 +28,5 @@ setup(
         "One cloudshell-cp-core For All cloudshell cloud provider shells."
     ),
     keywords="sandbox cloudshell json request",
-    include_package_data=True
+    include_package_data=True,
 )

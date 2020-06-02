@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
-from cloudshell.cp.core.requests.models import BaseRequestObject
-from cloudshell.cp.core.requests.models import BaseConnectivityAction
+from cloudshell.cp.core.requests.models import BaseConnectivityAction, BaseRequestObject
 
 
 @dataclass
