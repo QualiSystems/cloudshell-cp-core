@@ -11,9 +11,9 @@ class DeployVMRequestActions(BaseRequestActions):
 
     @classmethod
     def register_deployment_path(cls, deployment_path_cls):
-        """
+        """Register deployment path class.
 
-        :param deployment_path_cls:
+        :param cloudshell.cp.core.request_actions.models.DeployApp deployment_path_cls:
         :return:
         """
         cls.REGISTERED_DEPLOYMENT_PATH_MODELS[
@@ -22,11 +22,11 @@ class DeployVMRequestActions(BaseRequestActions):
 
     @classmethod
     def from_request(cls, request, cs_api=None):
-        """
+        """Create DeployVMRequestActions object from the string request.
 
-        :param request:
-        :param cs_api:
-        :return:
+        :param str request:
+        :param cloudshell.api.cloudshell_api.CloudShellAPISession cs_api:
+        :rtype: DeployVMRequestActions
         """
         actions = cls._parse_request_actions(request=request, cs_api=cs_api)
         obj = cls()

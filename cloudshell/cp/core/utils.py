@@ -4,7 +4,7 @@ import paramiko
 
 
 def generate_ssh_key_pair(bits=2048):
-    """Generate SSH key pair
+    """Generate SSH key pair.
 
     :param int bits:
     :rtype: tuple[str, str]

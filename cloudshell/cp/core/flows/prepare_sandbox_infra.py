@@ -9,19 +9,17 @@ from cloudshell.cp.core.request_actions.models import (
 
 
 class AbstractPrepareSandboxInfraFlow:
-    def __init__(self, resource_config, logger):
-        """
+    def __init__(self, logger):
+        """Init command.
 
-        :param resource_config:
-        :param logger:
+        :param logging.Logger logger:
         """
-        self._resource_config = resource_config
         self._logger = logger
 
     def prepare_cloud_infra(self, request_actions):
-        """
+        """Prepare Cloud Infra.
 
-        :param PrepareSandboxInfraRequestActions request_actions:
+        :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
         :return:
         """
         raise NotImplementedError(
@@ -29,9 +27,9 @@ class AbstractPrepareSandboxInfraFlow:
         )
 
     def prepare_subnets(self, request_actions):
-        """
+        """Prepare requested subnets.
 
-        :param PrepareSandboxInfraRequestActions request_actions:
+        :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
         :return dictionary PrepareSubnet.actionId: subnet_id
         :rtype: dict[str, str]
         """
@@ -40,9 +38,9 @@ class AbstractPrepareSandboxInfraFlow:
         )
 
     def create_ssh_keys(self, request_actions):
-        """
+        """Create SSH key pair and returns SSH private key.
 
-        :param PrepareSandboxInfraRequestActions request_actions:
+        :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
         :return: SSH Access key
         :rtype: str
         """
@@ -51,18 +49,18 @@ class AbstractPrepareSandboxInfraFlow:
         )
 
     def prepare_common_objects(self, request_actions):
-        """
+        """Prepare common objects.
 
-        :param request_actions:
+        :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
         :return:
         """
         pass
 
     def _prepare_cloud_infra(self, request_actions):
-        """
+        """Prepare Cloud Infra.
 
-        :param PrepareSandboxInfraRequestActions request_actions:
-        :return:
+        :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
+        :rtype: cloudshell.cp.core.request_actions.models.PrepareCloudInfraResult
         """
         action = request_actions.prepare_cloud_infra
         self.prepare_cloud_infra(request_actions)
@@ -70,10 +68,10 @@ class AbstractPrepareSandboxInfraFlow:
         return PrepareCloudInfraResult(actionId=action.actionId)
 
     def _prepare_subnets(self, request_actions):
-        """
+        """Prepare Subnets.
 
-        :param PrepareSandboxInfraRequestActions request_actions:
-        :return:
+        :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
+        :rtype: list[cloudshell.cp.core.request_actions.models.PrepareSubnetActionResult]
         """
         subnet_ids = self.prepare_subnets(request_actions)
 
@@ -85,21 +83,22 @@ class AbstractPrepareSandboxInfraFlow:
         ]
 
     def _create_ssh_keys(self, request_actions):
-        """
-
-        :param PrepareSandboxInfraRequestActions request_actions:
-        :return:
-        """
-        action = request_actions.create_keys
-        access_key = self.create_ssh_keys(action)
-
-        return CreateKeysActionResult(actionId=action.actionId, accessKey=access_key)
-
-    def prepare(self, request_actions):
-        """ss
+        """Create SSH Key pair.
 
         :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
-        :return:
+        :rtype: cloudshell.cp.core.request_actions.models.CreateKeysActionResult
+        """
+        access_key = self.create_ssh_keys(request_actions)
+
+        return CreateKeysActionResult(
+            actionId=request_actions.create_keys.actionId, accessKey=access_key
+        )
+
+    def prepare(self, request_actions):
+        """Prepare Sandbox Infra.
+
+        :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
+        :rtype: str
         """
         self.prepare_common_objects(request_actions=request_actions)
 
