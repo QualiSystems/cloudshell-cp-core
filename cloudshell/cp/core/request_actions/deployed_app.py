@@ -47,7 +47,7 @@ class DeployedApp:
     def allow_all_sandbox_traffic(self):
         return (
             self.attributes[
-                f"{self.deployment_service_model}.AllowallSandboxTraffic"
+                f"{self.deployment_service_model}.Allow all Sandbox Traffic"
             ].lower()
             == "true"
         )
