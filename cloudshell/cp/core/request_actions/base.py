@@ -1,6 +1,6 @@
 import json
 
-from cloudshell.cp.core.requests import models
+from cloudshell.cp.core.request_actions import models
 
 
 class BaseRequestActions:
