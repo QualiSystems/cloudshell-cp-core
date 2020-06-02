@@ -1,4 +1,4 @@
-from cloudshell.cp.core.models import DriverResponse, CleanupNetworkResult
+from cloudshell.cp.core.requests.models import DriverResponse, CleanupNetworkResult
 
 
 class AbstractCleanupSandboxInfraFlow:

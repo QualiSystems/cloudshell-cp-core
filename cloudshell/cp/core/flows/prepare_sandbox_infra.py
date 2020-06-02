@@ -1,6 +1,6 @@
 import concurrent
 
-from cloudshell.cp.core.models import (
+from cloudshell.cp.core.requests.models import (
     CreateKeysActionResult,
     DriverResponse,
     PrepareCloudInfraResult,
