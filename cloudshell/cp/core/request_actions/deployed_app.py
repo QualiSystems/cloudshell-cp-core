@@ -5,17 +5,17 @@ from dataclasses import dataclass, field
 
 @dataclass
 class VMDetails:
-    id: str
+    id: str  # noqa: A003
     cloud_provider_id: str
     uid: str
     vm_custom_params: dict = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, data):
-        """
+        """Create VMDetails from the dictionary data.
 
-        :param data:
-        :return:
+        :param dict data:
+        :rtype: VMDetails
         """
         return cls(
             id=data["id"],
@@ -58,11 +58,11 @@ class DeployedApp:
 
     @classmethod
     def from_data(cls, app_request_data, deployed_app_data):
-        """
+        """Create DeployedApp from the dictionaries.
 
         :param dict app_request_data:
         :param dict deployed_app_data:
-        :return:
+        :rtype: DeployedApp
         """
         attributes = {
             attr["name"]: attr["value"]
@@ -82,10 +82,10 @@ class DeployedApp:
 
     @classmethod
     def from_remote_resource(cls, resource):
-        """
+        """Create DeployedApp from the resource.
 
-        :param resource:
-        :return:
+        :param cloudshell.shell.core.driver_context.ResourceContextDetails resource:
+        :rtype: DeployedApp
         """
         return cls.from_data(
             app_request_data=json.loads(resource.app_context.app_request_json),

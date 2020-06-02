@@ -4,9 +4,9 @@ import json
 # todo: refactor this !!!!
 class DriverResponseRoot:
     def __init__(self, driver_response=None):
-        """
+        """Init command.
 
-        :param driver_response:
+        :param DriverResponse driver_response:
         """
         self.driverResponse = driver_response
 
@@ -22,15 +22,15 @@ class DriverResponseRoot:
 
 class DriverResponse:
     def __init__(self, action_results=None):
-        """
+        """Init command.
 
         :param action_results:
         """
         self.action_results = action_results or []
 
     def to_driver_response_json(self):
-        """
-        Wrap this object with DriverResponseRoot and converts it to json.
-        :return:
+        """Converts action results to the json.
+
+        :rtype: str
         """
         return DriverResponseRoot(driver_response=self).to_json()

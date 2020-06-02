@@ -1,8 +1,8 @@
 class CancellationContextManager:
     def __init__(self, cancellation_context):
-        """
+        """Init command.
 
-        :param cancellation_context:
+        :param cloudshell.shell.core.driver_context.CancellationContext cancellation_context:  # noqa: E501
         """
         self.cancellation_context = cancellation_context
 

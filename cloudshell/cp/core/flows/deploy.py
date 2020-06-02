@@ -2,28 +2,26 @@ from cloudshell.cp.core.request_actions import DriverResponse
 
 
 class AbstractDeployFlow:
-    def __init__(self, resource_config, logger):
-        """
+    def __init__(self, logger):
+        """Init command.
 
-        :param resource_config:
-        :param logger:
+        :param logging.Logger logger:
         """
-        self._resource_config = resource_config
         self._logger = logger
 
     def _deploy(self, request_actions):
-        """
+        """Deploy Virtual Machine.
 
-        :param CleanupSandboxInfraRequestActions request_actions:
-        :rtype: cloudshell.cp.core.models.DeployAppResult
+        :param cloudshell.cp.core.request_actions.DeployVMRequestActions request_actions:  # noqa: E501
+        :rtype: cloudshell.cp.core.request_actions.models.DeployAppResult
         """
         raise NotImplementedError(f"Class {type(self)} must implement method '_deploy'")
 
     def deploy(self, request_actions):
-        """
+        """Deploy Virtual Machine.
 
-        :param cloudshell.cp.core.driver_request_parser.RequestActions request_actions:
-        :return:
+        :param cloudshell.cp.core.request_actions.DeployVMRequestActions request_actions:  # noqa: E501
+        :rtype: str
         """
         deploy_app_result = self._deploy(request_actions=request_actions)
 
