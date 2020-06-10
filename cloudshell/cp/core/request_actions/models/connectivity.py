@@ -68,4 +68,4 @@ class ConnectSubnet(BaseConnectivityAction):
 
     @property
     def device_index(self):
-        return int(self.actionParams.vnicName)
+        return int(self.actionParams.vnicName or 0)
