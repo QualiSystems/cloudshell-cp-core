@@ -34,7 +34,7 @@ class DeployVMRequestActions(BaseRequestActions):
         for action in actions:
             if isinstance(action, models.DeployApp):
                 obj.deploy_app = action
-            elif isinstance(actions, models.ConnectSubnet):
+            elif isinstance(action, models.ConnectSubnet):
                 obj.connect_subnets.append(action)
 
         obj.connect_subnets.sort(key=lambda x: x.device_index)
