@@ -1,20 +1,27 @@
-from dataclasses import dataclass
+import json
+from dataclasses import dataclass, field
 
-from cloudshell.cp.core.request_actions.base import BaseRequestActions
+from cloudshell.cp.core.request_actions.models.app_security_group import (
+    AppSecurityGroup,
+)
 
 
 @dataclass
-class SetAppSecurityGroupsRequestActions(BaseRequestActions):
+class SetAppSecurityGroupsRequestActions:
+    security_groups: list = field(default_factory=list)
+
     @classmethod
-    def from_request(cls, request, cs_api=None):
+    def from_request(cls, request):
         """Create SetAppSecurityGroupsRequestActions object from the string request.
 
         :param str request:
-        :param cloudshell.api.cloudshell_api.CloudShellAPISession cs_api:
         :rtype: SetAppSecurityGroupsRequestActions
         """
-        actions = cls._parse_request_actions(request=request, cs_api=cs_api)
-        obj = cls()
-        cls.actions = actions
+        data = json.loads(request)
+        security_groups = []
 
-        return obj
+        for security_group_data in data:
+            security_group = AppSecurityGroup.from_dict(security_group_data)
+            security_groups.append(security_group)
+
+        return cls(security_groups=security_groups)
