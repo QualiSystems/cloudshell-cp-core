@@ -16,10 +16,10 @@ class VMDetails:
         :rtype: VMDetails
         """
         return cls(
-            id=data["id"],
-            cloud_provider_id=data["cloudProviderId"],
-            uid=data["uid"],
-            vm_custom_params=data["vmCustomParams"],
+            id=data.get("id"),
+            cloud_provider_id=data.get("cloudProviderId"),
+            uid=data.get("uid"),
+            vm_custom_params=data.get("vmCustomParams"),
         )
 
 

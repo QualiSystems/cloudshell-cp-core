@@ -73,11 +73,6 @@ class CreateKeysActionResult(BaseActionResult):
 
 
 @dataclass
-class SetAppSecurityGroupActionResult(BaseActionResult):
-    type: str = "SetAppSecurityGroup"  # noqa: A003
-
-
-@dataclass
 class SaveAppResult(BaseActionResult):
     artifacts: list = field(default_factory=list)
     savedEntityAttributes: list = field(default_factory=list)
