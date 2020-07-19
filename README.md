@@ -1,6 +1,6 @@
 # cloudshell-cp-core
-[![Build status](https://travis-ci.org/QualiSystems/cloudshell-cp-core.svg?branch=develop)](https://travis-ci.org/QualiSystems/cloudshell-cp-core)
-[![codecov](https://codecov.io/gh/QualiSystems/cloudshell-cp-core/branch/develop/graph/badge.svg)](https://codecov.io/gh/QualiSystems/cloudshell-cp-core)
+[![Build status](https://travis-ci.org/QualiSystems/cloudshell-cp-core.svg?branch=dev)](https://travis-ci.org/QualiSystems/cloudshell-cp-core)
+[![codecov](https://codecov.io/gh/QualiSystems/cloudshell-cp-core/branch/dev/graph/badge.svg)](https://codecov.io/gh/QualiSystems/cloudshell-cp-core)
 [![PyPI version](https://badge.fury.io/py/cloudshell-cp-core.svg)](https://badge.fury.io/py/cloudshell-cp-core)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 
