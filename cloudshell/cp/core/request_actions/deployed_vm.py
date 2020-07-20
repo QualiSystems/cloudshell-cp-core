@@ -6,7 +6,7 @@ from cloudshell.cp.core.request_actions import models
 
 
 @dataclass
-class DeployedVMRequestActions:
+class DeployedVMActions:
     REGISTERED_DEPLOYMENT_PATH_MODELS = {}
     deployed_app: models.DeployedApp = None
 
