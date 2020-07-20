@@ -1,4 +1,5 @@
 import concurrent
+from abc import ABC, abstractmethod
 
 from cloudshell.cp.core.request_actions import DriverResponse
 from cloudshell.cp.core.request_actions.models import (
@@ -8,7 +9,7 @@ from cloudshell.cp.core.request_actions.models import (
 )
 
 
-class AbstractPrepareSandboxInfraFlow:
+class AbstractPrepareSandboxInfraFlow(ABC):
     def __init__(self, logger):
         """Init command.
 
@@ -16,16 +17,16 @@ class AbstractPrepareSandboxInfraFlow:
         """
         self._logger = logger
 
+    @abstractmethod
     def prepare_cloud_infra(self, request_actions):
         """Prepare Cloud Infra.
 
         :param cloudshell.cp.core.request_actions.PrepareSandboxInfraRequestActions request_actions:  # noqa: E501
         :return:
         """
-        raise NotImplementedError(
-            f"Class {type(self)} must implement method 'prepare_cloud_infra'"
-        )
+        pass
 
+    @abstractmethod
     def prepare_subnets(self, request_actions):
         """Prepare requested subnets.
 
@@ -33,10 +34,9 @@ class AbstractPrepareSandboxInfraFlow:
         :return dictionary PrepareSubnet.actionId: subnet_id
         :rtype: dict[str, str]
         """
-        raise NotImplementedError(
-            f"Class {type(self)} must implement method 'prepare_subnet'"
-        )
+        pass
 
+    @abstractmethod
     def create_ssh_keys(self, request_actions):
         """Create SSH key pair and returns SSH private key.
 
@@ -44,9 +44,7 @@ class AbstractPrepareSandboxInfraFlow:
         :return: SSH Access key
         :rtype: str
         """
-        raise NotImplementedError(
-            f"Class {type(self)} must implement method 'create_ssh_keys'"
-        )
+        pass
 
     def prepare_common_objects(self, request_actions):
         """Prepare common objects.

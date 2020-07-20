@@ -1,7 +1,9 @@
+from abc import ABC, abstractmethod
+
 import jsonpickle as jsonpickle
 
 
-class AbstractVMDetailsFlow:
+class AbstractVMDetailsFlow(ABC):
     def __init__(self, logger):
         """Init command.
 
@@ -9,15 +11,14 @@ class AbstractVMDetailsFlow:
         """
         self._logger = logger
 
+    @abstractmethod
     def _get_vm_details(self, deployed_app):
         """Get VM Details.
 
         :param cloudshell.cp.core.request_actions.DeployedApp deployed_app:
         :rtype: cloudshell.cp.core.request_actions.models.VmDetailsData
         """
-        raise NotImplementedError(
-            f"Class {type(self)} must implement method '_get_vm_details'"
-        )
+        pass
 
     def get_vm_details(self, request_actions):
         """Get VM Details.
