@@ -1,11 +1,11 @@
 import json
 from dataclasses import dataclass, field
 
-from cloudshell.cp.core.request_actions.deployed_vm import DeployedVMRequestActions
+from cloudshell.cp.core.request_actions.deployed_vm import DeployedVMActions
 
 
 @dataclass
-class GetVMDetailsRequestActions(DeployedVMRequestActions):
+class GetVMDetailsRequestActions(DeployedVMActions):
     deployed_apps: list = field(default_factory=list)
 
     @classmethod
