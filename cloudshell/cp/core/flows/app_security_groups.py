@@ -1,9 +1,11 @@
+from abc import ABC, abstractmethod
+
 import jsonpickle as jsonpickle
 
 from cloudshell.cp.core.request_actions.models import SetAppSecurityGroupActionResult
 
 
-class AbstractAppSecurityGroupsFlow:
+class AbstractAppSecurityGroupsFlow(ABC):
     def __init__(self, logger):
         """Init command.
 
@@ -11,15 +13,14 @@ class AbstractAppSecurityGroupsFlow:
         """
         self._logger = logger
 
+    @abstractmethod
     def _set_app_security_group(self, security_group):
         """Set App Security Groups.
 
         :param security_group:
         :rtype:
         """
-        raise NotImplementedError(
-            f"Class {type(self)} must implement method '_set_app_security_group'"
-        )
+        pass
 
     def set_app_security_groups(self, request_actions):
         """Set App Security Groups.

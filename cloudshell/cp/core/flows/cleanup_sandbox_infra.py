@@ -1,24 +1,25 @@
+from abc import ABC, abstractmethod
+
 from cloudshell.cp.core.request_actions import DriverResponse
 from cloudshell.cp.core.request_actions.models import CleanupNetworkResult
 
 
-class AbstractCleanupSandboxInfraFlow:
+class AbstractCleanupSandboxInfraFlow(ABC):
     def __init__(self, logger):
         """Init command.
 
-        :param logger:
+        :param logging.Logger logger:
         """
         self._logger = logger
 
+    @abstractmethod
     def cleanup_sandbox_infra(self, request_actions):
         """Cleanup Sandbox Infra.
 
         :param cloudshell.cp.core.request_actions.CleanupSandboxInfraRequestActions request_actions:  # noqa: E501
         :return:
         """
-        raise NotImplementedError(
-            f"Class {type(self)} must implement method 'cleanup_sandbox_infra'"
-        )
+        pass
 
     def _cleanup_sandbox_infra(self, request_actions):
         """Cleanup Sandbox Infra.

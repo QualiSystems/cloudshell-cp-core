@@ -1,8 +1,10 @@
+from abc import ABC, abstractmethod
+
 from cloudshell.cp.core.request_actions import DriverResponse
 from cloudshell.cp.core.request_actions.models import ConnectToSubnetActionResult
 
 
-class AbstractDeployFlow:
+class AbstractDeployFlow(ABC):
     def __init__(self, logger):
         """Init command.
 
@@ -10,13 +12,14 @@ class AbstractDeployFlow:
         """
         self._logger = logger
 
+    @abstractmethod
     def _deploy(self, request_actions):
         """Deploy Virtual Machine.
 
         :param cloudshell.cp.core.request_actions.DeployVMRequestActions request_actions:  # noqa: E501
         :rtype: cloudshell.cp.core.request_actions.models.DeployAppResult
         """
-        raise NotImplementedError(f"Class {type(self)} must implement method '_deploy'")
+        pass
 
     def _prepare_connect_to_subnet_results(self, request_actions):
         """Prepare Connect to Subnet Action results.
