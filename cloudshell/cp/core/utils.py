@@ -1,6 +1,8 @@
-from io import StringIO
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization as crypto_serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 
-import paramiko
+PUBLIC_EXPONENT = 65537
 
 
 def generate_ssh_key_pair(bits=2048):
@@ -9,10 +11,19 @@ def generate_ssh_key_pair(bits=2048):
     :param int bits:
     :rtype: tuple[str, str]
     """
-    key = paramiko.RSAKey.generate(bits)
-    public_key = f"{key.get_name()} {key.get_base64()}"
-    private_key = StringIO()
-    key.write_private_key(private_key)
-    private_key.seek(0)
+    key = rsa.generate_private_key(
+        backend=default_backend(), public_exponent=PUBLIC_EXPONENT, key_size=bits
+    )
 
-    return private_key.read(), public_key
+    private_key = key.private_bytes(
+        encoding=crypto_serialization.Encoding.PEM,
+        format=crypto_serialization.PrivateFormat.TraditionalOpenSSL,
+        encryption_algorithm=crypto_serialization.NoEncryption(),
+    )
+
+    public_key = key.public_key().public_bytes(
+        encoding=crypto_serialization.Encoding.OpenSSH,
+        format=crypto_serialization.PublicFormat.OpenSSH,
+    )
+
+    return private_key.decode(), public_key.decode()
