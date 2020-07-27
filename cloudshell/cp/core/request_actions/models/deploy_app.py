@@ -30,15 +30,15 @@ class DeployApp(BaseRequestAction):
     actionParams: DeployAppParams = None
     attributes: dict = field(default_factory=dict)
 
+    _cs_api: "cloudshell.api.cloudshell_api.CloudShellAPISession" = None
+    _password: str = None
+
     def __post_init__(self):
         for attr in itertools.chain(
             self.actionParams.appResource.attributes,
             self.actionParams.deployment.attributes,
         ):
             self.attributes[attr.attributeName] = attr.attributeValue
-
-        self._cs_api = None
-        self._password = None
 
     def set_cloudshell_api(self, api):
         """Set CloudShell API.
@@ -47,6 +47,16 @@ class DeployApp(BaseRequestAction):
         :return:
         """
         self._cs_api = api
+
+    def _get_app_resource_attribute(self, attr_name):
+        """Get App Resource attribute by its name.
+
+        :param str attr_name:
+        :return:
+        """
+        for attr, value in self.attributes.items():
+            if any([attr == attr_name, attr.endswith(f".{attr_name}")]):
+                return value
 
     def _decrypt_password(self, password):
         """Decrypt CloudShell password.
@@ -61,17 +71,17 @@ class DeployApp(BaseRequestAction):
 
     @property
     def user(self):
-        return self.attributes.get("User")
+        return self._get_app_resource_attribute("User")
 
     @property
     def password(self):
         if self._password is None:
             self._password = self._decrypt_password(
-                password=self.attributes.get("Password")
+                password=self._get_app_resource_attribute("Password")
             )
 
         return self._password
 
     @property
     def public_ip(self):
-        return self.attributes.get("Public IP")
+        return self._get_app_resource_attribute("Public IP")
