@@ -25,32 +25,52 @@ class VMDetails:
 
 @dataclass
 class DeployedApp:
+    GENERIC_APP_MODEL = "Generic App Model"
+    GENERIC_APP_FAMILY = "Generic App Family"
     DEPLOYMENT_PATH = ""
-    PUBLIC_IP_KEY = "Public IP"
 
-    name: str
-    deployment_service_model: str
-    private_ip: str
-    attributes: dict = field(default_factory=dict)
+    name: str = ""
+    family: str = ""
+    model: str = ""
+    deployment_service_model: str = ""
+    private_ip: str = ""
     vmdetails: VMDetails = None
+    attributes: dict = field(default_factory=dict)
+    cs_api: "cloudshell.api.cloudshell_api.CloudShellAPISession" = None
+    _password: str = None
 
-    @property
-    def user(self):
-        return self.attributes["User"]
+    def __post_init__(self):
+        if all([self.family == self.GENERIC_APP_FAMILY,
+                self.model == self.GENERIC_APP_MODEL]):
+            self._namespace = ""
+        else:
+            self._namespace = f"{self.model}."
 
-    @property
-    def password(self):
-        return self.attributes["Password"]
+    def update_public_ip(self, public_ip):
+        """Update Public IP Attribute on the CloudShell.
 
-    @property
-    def allow_all_sandbox_traffic(self):
-        return (
-            self.attributes[
-                f"{self.deployment_service_model}.Allow all Sandbox Traffic"
-            ].lower()
-            == "true"
+        :param public_ip:
+        :return:
+        """
+        self.cs_api.SetAttributeValue(
+            resourceFullPath=self.name,
+            attributeName=f"{self._namespace}Public IP",
+            attributeValue=public_ip,
         )
 
     @property
+    def user(self):
+        return self.attributes[f"{self._namespace}User"]
+
+    @property
+    def password(self):
+        if self._password is None:
+            self._password = self.cs_api.DecryptPassword(
+                password=self.attributes[f"{self._namespace}Password"]
+            ).Value
+
+        return self._password
+
+    @property
     def public_ip(self):
-        return self.attributes[self.PUBLIC_IP_KEY]
+        return self.attributes[f"{self._namespace}Public IP"]
