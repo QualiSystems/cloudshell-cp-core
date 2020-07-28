@@ -36,12 +36,16 @@ class DeployedApp:
     private_ip: str = ""
     vmdetails: VMDetails = None
     attributes: dict = field(default_factory=dict)
-    cs_api: "cloudshell.api.cloudshell_api.CloudShellAPISession" = None
+    cs_api: "cloudshell.api.cloudshell_api.CloudShellAPISession" = None  # noqa: F821
     _password: str = None
 
     def __post_init__(self):
-        if all([self.family == self.GENERIC_APP_FAMILY,
-                self.model == self.GENERIC_APP_MODEL]):
+        if all(
+            [
+                self.family == self.GENERIC_APP_FAMILY,
+                self.model == self.GENERIC_APP_MODEL,
+            ]
+        ):
             self._namespace = ""
         else:
             self._namespace = f"{self.model}."
