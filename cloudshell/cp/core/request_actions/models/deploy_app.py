@@ -30,7 +30,7 @@ class DeployApp(BaseRequestAction):
     actionParams: DeployAppParams = None
     attributes: dict = field(default_factory=dict)
 
-    _cs_api: "cloudshell.api.cloudshell_api.CloudShellAPISession" = None
+    _cs_api: "cloudshell.api.cloudshell_api.CloudShellAPISession" = None  # noqa: F821
     _password: str = None
 
     def __post_init__(self):
