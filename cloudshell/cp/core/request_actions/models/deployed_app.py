@@ -62,6 +62,9 @@ class DeployedApp:
             attributeValue=public_ip,
         )
 
+    def update_private_ip(self, resource_name: str, private_ip: str):
+        self.cs_api.UpdateResourceAddress(resource_name, private_ip)
+
     @property
     def user(self):
         return self.attributes[f"{self._namespace}User"]
@@ -70,7 +73,7 @@ class DeployedApp:
     def password(self):
         if self._password is None:
             self._password = self.cs_api.DecryptPassword(
-                password=self.attributes[f"{self._namespace}Password"]
+                self.attributes[f"{self._namespace}Password"]
             ).Value
 
         return self._password

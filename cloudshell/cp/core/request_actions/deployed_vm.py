@@ -1,13 +1,14 @@
 import itertools
 import json
 from dataclasses import dataclass
+from typing import Dict
 
 from cloudshell.cp.core.request_actions import models
 
 
 @dataclass
 class DeployedVMActions:
-    REGISTERED_DEPLOYMENT_PATH_MODELS = {}
+    REGISTERED_DEPLOYMENT_PATH_MODELS = {}  # type: Dict[str, models.DeployedApp]
     deployed_app: models.DeployedApp = None
 
     @classmethod
@@ -28,7 +29,7 @@ class DeployedVMActions:
         :param dict app_request_data:
         :param dict deployed_app_data:
         :param cloudshell.api.cloudshell_api.CloudShellAPISession cs_api:
-        :rtype: models.DeployedApp
+        :rtype: DeployedVMActions
         """
         attributes = {
             attr["name"]: attr["value"]
@@ -61,7 +62,7 @@ class DeployedVMActions:
 
         :param cloudshell.api.cloudshell_api.CloudShellAPISession cs_api:
         :param cloudshell.shell.core.driver_context.ResourceContextDetails resource:
-        :rtype: models.DeployedApp
+        :rtype: DeployedVMActions
         """
         return cls.from_data(
             app_request_data=json.loads(resource.app_context.app_request_json),
