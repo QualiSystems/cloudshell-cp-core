@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-import jsonpickle as jsonpickle
+import jsonpickle
 
 
 class AbstractVMDetailsFlow(ABC):
@@ -32,4 +32,4 @@ class AbstractVMDetailsFlow(ABC):
             vm_details_data = self._get_vm_details(deployed_app=deployed_app)
             results.append(vm_details_data)
 
-        return jsonpickle.encode(results)
+        return jsonpickle.encode(results, unpicklable=False)
