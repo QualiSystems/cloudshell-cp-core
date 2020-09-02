@@ -1,3 +1,6 @@
+from cloudshell.cp.core.exceptions import CancellationContextException
+
+
 class CancellationContextManager:
     def __init__(self, cancellation_context):
         """Init command.
@@ -11,4 +14,4 @@ class CancellationContextManager:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.cancellation_context.is_cancelled:
-            raise Exception("Command was cancelled from the portal")
+            raise CancellationContextException("Command was cancelled from the portal")

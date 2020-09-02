@@ -70,6 +70,10 @@ class DeployApp(BaseRequestAction):
         return self._cs_api.DecryptPassword(password).Value
 
     @property
+    def app_name(self) -> str:
+        return self.actionParams.appName.lower().replace(" ", "-")
+
+    @property
     def user(self):
         return self._get_app_resource_attribute("User")
 
