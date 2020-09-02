@@ -14,7 +14,6 @@ class DeployVMRequestActions(BaseRequestActions):
     @classmethod
     def register_deployment_path(cls, deployment_path_cls: Type[DeployApp]):
         """Register deployment path class."""
-
         cls.REGISTERED_DEPLOYMENT_PATH_MODELS[
             deployment_path_cls.DEPLOYMENT_PATH
         ] = deployment_path_cls
