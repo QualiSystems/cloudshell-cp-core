@@ -24,7 +24,7 @@ setup(
     version=version_from_file,
     description=(
         "A repository for projects providing out of the box capabilities within "
-        "CloudShell to parse and convert cloushell driver request to well defined "
+        "CloudShell to parse and convert cloudShell driver request to well defined "
         "python objects. One cloudshell-cp-core For All cloudshell cloud provider "
         "shells."
     ),
