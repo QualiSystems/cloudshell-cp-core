@@ -1,3 +1,6 @@
+from __future__ import (absolute_import, division, print_function, unicode_literals)
+from builtins import str
+
 import ipaddress
 
 from cloudshell.cp.core.requested_ips.validator import RequestedIPsValidator
@@ -65,7 +68,7 @@ class RequestedIPsParser:
         :rtype: list
         """
         range_start, range_length = ip_req_single.split('-')
-        start_ip = ipaddress.ip_address(unicode(range_start))
+        start_ip = ipaddress.ip_address(str(range_start))
 
         ips_in_range = []
         for i in range(0, int(range_length) + 1):

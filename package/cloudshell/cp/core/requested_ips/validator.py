@@ -1,3 +1,5 @@
+from __future__ import (absolute_import, division, print_function, unicode_literals)
+from builtins import str
 import ipaddress
 
 
@@ -16,7 +18,7 @@ class RequestedIPsValidator:
         if not len(address_and_range) == 2:
             raise_err('Missing delimiter')
 
-        ip = unicode(address_and_range[0])
+        ip = str(address_and_range[0])
 
         # 2. validate that the IP address part of the range has a valid IP address
         RequestedIPsValidator.validate_ip_address(ip)
@@ -45,7 +47,7 @@ class RequestedIPsValidator:
         :param str ip:
         """
         # if ip address is not valid the following line will raise an exception
-        ipaddress.ip_address(unicode(ip))
+        ipaddress.ip_address(str(ip))
 
     @staticmethod
     def is_range(ip):

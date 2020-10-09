@@ -1,5 +1,7 @@
+from __future__ import (absolute_import, division, print_function, unicode_literals)
+from builtins import str
+
 import ipaddress
-from typing import Dict, List
 
 
 class RequestedIPsMapper:
@@ -18,13 +20,13 @@ class RequestedIPsMapper:
         cidrs = map(lambda x: x.actionParams.cidr, network_actions)
         requested_ips_list_address_obj = \
             map(lambda ips_for_nic:
-                (map(lambda x: ipaddress.ip_address(unicode(x)), ips_for_nic), ips_for_nic),
+                (map(lambda x: ipaddress.ip_address(str(x)), ips_for_nic), ips_for_nic),
                 self._requested_ips_list)
 
         cidrs_to_req_ips = {}
 
         for subnet_cidr in cidrs:
-            subnet = ipaddress.ip_network(unicode(subnet_cidr))
+            subnet = ipaddress.ip_network(str(subnet_cidr))
 
             for ips_for_nic_ipaddress_obj, ips_for_nic in requested_ips_list_address_obj:
                 # check if all ips are in subnet
