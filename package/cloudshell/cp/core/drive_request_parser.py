@@ -2,6 +2,7 @@ import sys
 from cloudshell.cp.core.utils import  *
 from cloudshell.cp.core.models import *
 
+
 class DriverRequestParser:
 
     def __init__(self):
@@ -71,30 +72,31 @@ class DriverRequestParser:
         """
         for key, value in source.items():
 
-            if (isinstance(value, dict)):
+            if isinstance(value, dict):
                 created = self._create_object_of_type(value)
 
-                # if we are at deployment object , create custom model
+                # if we are at deployment object, create custom model
                 self._handle_deployment_custom_model(created, value)
                 set_value(result, key, created)
                 self._fill_recursive(value, getattr(result, key))
-            elif (isinstance(value, (list))):
 
-                    if(self._try_convert_to_attributes_dict(value, result, key)):
-                        continue
+            elif isinstance(value, (list)):
 
-                    created_arr = []
-                    set_value(result, key, created_arr)
+                if self._try_convert_to_attributes_dict(value, result, key):
+                    continue
 
-                    for item in value:
-                        if isinstance(item, (dict)):
-                            created_item = self._create_object_of_type(item)
-                            created_arr.append(created_item)
-                            self._fill_recursive(item, created_item)
-                        else:
-                            created_arr.append(item)
+                created_arr = []
+                set_value(result, key, created_arr)
 
-            else: # primitive value
+                for item in value:
+                    if isinstance(item, (dict)):
+                        created_item = self._create_object_of_type(item)
+                        created_arr.append(created_item)
+                        self._fill_recursive(item, created_item)
+                    else:
+                        created_arr.append(item)
+
+            else:  # primitive value
                 set_value(result, key, value)
 
     def _handle_deployment_custom_model(self, result, item):
