@@ -6,7 +6,7 @@ import ipaddress
 class RequestedIPsValidator:
 
     @staticmethod
-    def validate_ip_address_range(ip_range):
+    def validate_ip_address_range_basic(ip_range):
         """
         :param str ip_range:
         """
@@ -30,17 +30,6 @@ class RequestedIPsValidator:
         except:
             raise_err('The range length is not a valid integer')
 
-        # 4. validate max length for range 'length'
-        if range_length > 253:
-            raise raise_err('The range max length is 253')
-
-        # 5. validate that all IPs in the range are legal
-        ip_range_start = ipaddress.ip_address(ip)
-        ip_range_end = ip_range_start + range_length
-        network = ipaddress.ip_network(ip[:ip.rfind('.')] + u'.0/24')
-        if ip_range_end not in network:
-            raise_err('Requested range is illegal. All IPs in the range should be in the same network')
-
     @staticmethod
     def validate_ip_address(ip):
         """
@@ -56,7 +45,7 @@ class RequestedIPsValidator:
         :rtype: bool
         """
         try:
-            RequestedIPsValidator.validate_ip_address_range(ip)
+            RequestedIPsValidator.validate_ip_address_range_basic(ip)
             return True
         except:
             return False

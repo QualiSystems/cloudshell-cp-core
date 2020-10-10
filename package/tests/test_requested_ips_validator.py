@@ -22,7 +22,7 @@ class TestRequestedIPsValidator(unittest.TestCase):
         with self.assertRaises(ValueError):
             RequestedIPsValidator.validate_ip_address(ip)
 
-    @patch('cloudshell.cp.core.requested_ips.validator.RequestedIPsValidator.validate_ip_address_range')
+    @patch('cloudshell.cp.core.requested_ips.validator.RequestedIPsValidator.validate_ip_address_range_basic')
     def test_is_range_true(self, validate_ip_address_range_mock):
         # arrange
         ip = Mock()
@@ -33,7 +33,7 @@ class TestRequestedIPsValidator(unittest.TestCase):
         # assert
         self.assertTrue(result)
 
-    @patch('cloudshell.cp.core.requested_ips.validator.RequestedIPsValidator.validate_ip_address_range')
+    @patch('cloudshell.cp.core.requested_ips.validator.RequestedIPsValidator.validate_ip_address_range_basic')
     def test_is_range_false(self, validate_ip_address_range_mock):
         # arrange
         ip = Mock()
@@ -50,7 +50,7 @@ class TestRequestedIPsValidator(unittest.TestCase):
         range = '10.0.0.1-10'
 
         # act
-        RequestedIPsValidator.validate_ip_address_range(range)
+        RequestedIPsValidator.validate_ip_address_range_basic(range)
 
     def test_validate_ip_address_range_error_basic_structure(self):
         # arrange
@@ -58,7 +58,7 @@ class TestRequestedIPsValidator(unittest.TestCase):
 
         # act & assert
         with self.assertRaisesRegexp(ValueError, 'Missing delimiter'):
-            RequestedIPsValidator.validate_ip_address_range(range)
+            RequestedIPsValidator.validate_ip_address_range_basic(range)
 
     def test_validate_ip_address_range_error_ip_address_invalid(self):
         # arrange
@@ -66,7 +66,7 @@ class TestRequestedIPsValidator(unittest.TestCase):
 
         # act & assert
         with self.assertRaises(ValueError):
-            RequestedIPsValidator.validate_ip_address_range(range)
+            RequestedIPsValidator.validate_ip_address_range_basic(range)
 
     def test_validate_ip_address_range_error_range_length_not_int(self):
         # arrange
@@ -74,20 +74,4 @@ class TestRequestedIPsValidator(unittest.TestCase):
 
         # act & assert
         with self.assertRaisesRegexp(ValueError, 'range length is not a valid integer'):
-            RequestedIPsValidator.validate_ip_address_range(range)
-
-    def test_validate_ip_address_range_error_range_length_too_big(self):
-        # arrange
-        range = '10.0.0.1-254'  # max range length is 253
-
-        # act & assert
-        with self.assertRaisesRegexp(ValueError, 'range max length is 253'):
-            RequestedIPsValidator.validate_ip_address_range(range)
-
-    def test_validate_ip_address_range_error_range_request_legal(self):
-        # arrange
-        range = '10.0.0.250-20'  # some of the ips in the requested range are outside of the network
-
-        # act & assert
-        with self.assertRaisesRegexp(ValueError, 'Requested range is illegal'):
-            RequestedIPsValidator.validate_ip_address_range(range)
+            RequestedIPsValidator.validate_ip_address_range_basic(range)

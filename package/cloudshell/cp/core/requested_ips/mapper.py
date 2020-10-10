@@ -17,11 +17,11 @@ class RequestedIPsMapper:
         :param List[cloudshell.cp.core.models.ConnectSubnet] network_actions:
         :rtype: Dict[str, List[str]]
         """
-        cidrs = map(lambda x: x.actionParams.cidr, network_actions)
+        cidrs = list(map(lambda x: x.actionParams.cidr, network_actions))
         requested_ips_list_address_obj = \
-            map(lambda ips_for_nic:
-                (map(lambda x: ipaddress.ip_address(str(x)), ips_for_nic), ips_for_nic),
-                self._requested_ips_list)
+            list(map(lambda ips_for_nic:
+                (list(map(lambda x: ipaddress.ip_address(str(x)), ips_for_nic)), ips_for_nic),
+                self._requested_ips_list))
 
         cidrs_to_req_ips = {}
 
