@@ -1,9 +1,13 @@
+from cloudshell.cp.core.requested_ips.parser import RequestedIPsParser
+
+
 class Printable:
     def __str__(self):
         return str(self.__class__) + ":\t" + str(self.__dict__)
 
     def __repr__(self):
         return str(self)
+
 
 # region base
 import json
@@ -47,13 +51,14 @@ class ConnectivityVlanActionBase(ConnectivityActionBase):
 # region Common
 
 class Attribute(RequestObjectBase):
-    def __init__(self,attributeName = '',attributeValue = ''):
+    def __init__(self, attributeName='', attributeValue=''):
         RequestObjectBase.__init__(self)
-        self.attributeName = attributeName    # type: str
+        self.attributeName = attributeName  # type: str
         self.attributeValue = attributeValue  # type: str
 
 
 # endregion
+
 # region DeployApp
 
 class DeployApp(RequestActionBase):
@@ -76,6 +81,13 @@ class DeployAppDeploymentInfo(RequestObjectBase):
         self.deploymentPath = ''  # type: str
         self.attributes = None  # type: dict
         self.customModel = None  # type: object
+        self._requested_ips = None  # type:
+
+    @property
+    def requested_ips(self):
+        if not self._requested_ips:
+            self._requested_ips = RequestedIPsParser.parse(self.attributes)
+        return self._requested_ips
 
 
 class AppResourceInfo(RequestObjectBase):
@@ -83,8 +95,8 @@ class AppResourceInfo(RequestObjectBase):
         RequestObjectBase.__init__(self)
         self.attributes = None  # type: dict
 
-
 # endregion
+
 # region CreateKeys
 
 class CreateKeys(RequestActionBase):
@@ -93,6 +105,7 @@ class CreateKeys(RequestActionBase):
 
 
 # endregion
+
 # region PrepareSubnet
 
 class PrepareSubnet(ConnectivityActionBase):
@@ -155,8 +168,8 @@ class ConnectToSubnetParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
         self.cidr = ''  # type: str
-        self.subnetId = ''                  # type: str
-        self.isPublic = True               # type: bool
+        self.subnetId = ''  # type: str
+        self.isPublic = True  # type: bool
         self.subnetServiceAttributes = None  # type: dict
         self.vnicName = ''  # type: str
 
@@ -189,13 +202,14 @@ class SaveApp(RequestActionBase):
 class SaveAppParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
-        self.saveDeploymentModel       = ''  # type: str
-        self.savedSandboxId            = ''  # type: str
-        self.sourceVmUuid              = ''  # type: str
-        self.sourceAppName             = ''  # type: str
-        self.deploymentPathAttributes  = []  # type: list[Attribute]
-# endregion
+        self.saveDeploymentModel = ''  # type: str
+        self.savedSandboxId = ''  # type: str
+        self.sourceVmUuid = ''  # type: str
+        self.sourceAppName = ''  # type: str
+        self.deploymentPathAttributes = []  # type: list[Attribute]
 
+
+# endregion
 
 # region Delete Saved Sandbox
 class DeleteSavedApp(RequestActionBase):
@@ -207,14 +221,15 @@ class DeleteSavedApp(RequestActionBase):
 class DeleteSavedAppParams(RequestObjectBase):
     def __init__(self):
         RequestObjectBase.__init__(self)
-        self.saveDeploymentModel       = ''  # type: str
-        self.savedSandboxId            = ''  # type: str
-        self.artifacts                 = []  # type: list[Artifact]
-        self.savedAppName              = ''  # type: str
+        self.saveDeploymentModel = ''  # type: str
+        self.savedSandboxId = ''  # type: str
+        self.artifacts = []  # type: list[Artifact]
+        self.savedAppName = ''  # type: str
+
+
 # endregion
 
 # region Traffic Mirroring
-
 
 class RemoveTrafficMirroring(RequestActionBase):
     def __init__(self):
@@ -258,11 +273,10 @@ class PortRange(RequestObjectBase):
 
 # endregion
 
-
 # region driver response
 
 class DriverResponseRoot(object):
-    def __init__(self,driverResponse = None):
+    def __init__(self, driverResponse=None):
         """
         :param driverResponse:  DriverResponse
         """
@@ -271,12 +285,13 @@ class DriverResponseRoot(object):
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__)
 
+
 class DriverResponse(object):
-    def __init__(self,actionResults = None):
+    def __init__(self, actionResults=None):
         """
         :param actionResults: [ActionResultBase]
         """
-        self.actionResults = actionResults if actionResults else [] # type: [ActionResultBase]
+        self.actionResults = actionResults if actionResults else []  # type: [ActionResultBase]
 
     def to_driver_response_json(self):
         """
@@ -285,9 +300,10 @@ class DriverResponse(object):
         """
         return DriverResponseRoot(driverResponse=self).to_json()
 
-#endregion
-# region actions results
 
+# endregion
+
+# region actions results
 
 class ActionResultBase:
     def __init__(self, type='', actionId='', success=True, infoMessage='', errorMessage=''):
@@ -298,11 +314,11 @@ class ActionResultBase:
         :param infoMessage:  str
         :param errorMessage: str
         """
-        self.type = type                 # type: str
-        self.actionId = actionId         # type: str
-        self.success = success           # type: bool
-        self.infoMessage = infoMessage   # type: str
-        self.errorMessage = errorMessage # type: str
+        self.type = type  # type: str
+        self.actionId = actionId  # type: str
+        self.success = success  # type: bool
+        self.infoMessage = infoMessage  # type: str
+        self.errorMessage = errorMessage  # type: str
 
 
 class DeployAppResult(ActionResultBase):
@@ -331,7 +347,7 @@ class DeployAppResult(ActionResultBase):
 
 
 class VmDetailsData(object):
-    def __init__(self, vmInstanceData=None, vmNetworkData=None,appName = '',errorMessage = ''):
+    def __init__(self, vmInstanceData=None, vmNetworkData=None, appName='', errorMessage=''):
         """
         :param vmInstanceData: [VmDetailsProperty]
         :param vmNetworkData:  [VmDetailsNetworkInterface]
@@ -343,6 +359,7 @@ class VmDetailsData(object):
         self.vmNetworkData = vmNetworkData if vmNetworkData else []  # type: [VmDetailsNetworkInterface]
         self.appName = appName
         self.errorMessage = errorMessage
+
 
 class VmDetailsProperty(object):
     def __init__(self, key='', value='', hidden=False):
@@ -357,7 +374,8 @@ class VmDetailsProperty(object):
 
 
 class VmDetailsNetworkInterface(object):
-    def __init__(self, interfaceId='', networkId='', isPrimary=False, isPredefined=False, networkData=None,privateIpAddress='',publicIpAddress=''):
+    def __init__(self, interfaceId='', networkId='', isPrimary=False, isPredefined=False, networkData=None,
+                 privateIpAddress='', publicIpAddress=''):
         """
         :param interfaceId:  str
         :param networkId:    str
@@ -416,18 +434,21 @@ class SaveAppResult(ActionResultBase):
         :param additionalData: list[DataElement]
         """
         ActionResultBase.__init__(self, 'SaveApp', actionId, success, infoMessage, errorMessage)
-        self.artifacts             = artifacts or []  # type: list[Artifact]
+        self.artifacts = artifacts or []  # type: list[Artifact]
         self.savedEntityAttributes = savedEntityAttributes or []
-        self.additionalData        = additionalData or []
+        self.additionalData = additionalData or []
+
 
 class SetVlanResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', updatedInterface=''):
         ActionResultBase.__init__(self, 'setVlan', actionId, success, infoMessage, errorMessage)
         self.updatedInterface = updatedInterface
 
+
 class RemoveVlanResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
         ActionResultBase.__init__(self, 'removeVlan', actionId, success, infoMessage, errorMessage)
+
 
 class CleanupNetworkResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage=''):
@@ -448,13 +469,13 @@ class RemoveTrafficMirroringResult(ActionResultBase):
 class Artifact(RequestObjectBase):
     def __init__(self, artifactRef='', artifactName=''):
         RequestObjectBase.__init__(self)
-        self.artifactRef   = artifactRef      # type str
-        self.artifactName  = artifactName     # type str
+        self.artifactRef = artifactRef  # type str
+        self.artifactName = artifactName  # type str
 
 
 class DataElement(object):
     def __init__(self, name, value):
-        self.name  = name
+        self.name = name
         self.value = value
 
 # endregion

@@ -4,6 +4,9 @@ import os
 with open(os.path.join('version.txt')) as version_file:
     version_from_file = version_file.read().strip()
 
+with open('requirements.txt') as f_required:
+    required = f_required.read().splitlines()
+
 setup(
         name="cloudshell-cp-core",
         author="Quali",
@@ -14,7 +17,7 @@ setup(
         packages=find_packages(),
         test_suite='nose.collector',
         package_data={'': ['*.txt']},
-        install_requires=[],
+        install_requires=required,
         version=version_from_file,
         include_package_data=True,
         keywords="sandbox cloudshell json request",
