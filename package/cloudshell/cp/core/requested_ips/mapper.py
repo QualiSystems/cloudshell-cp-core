@@ -17,6 +17,9 @@ class RequestedIPsMapper:
         :param List[cloudshell.cp.core.models.ConnectSubnet] network_actions:
         :rtype: Dict[str, List[str]]
         """
+        if not self._requested_ips_list:
+            return {}
+
         cidrs = list(map(lambda x: x.actionParams.cidr, network_actions))
         requested_ips_list_address_obj = \
             list(map(lambda ips_for_nic:

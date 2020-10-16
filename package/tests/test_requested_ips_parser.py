@@ -99,3 +99,23 @@ class TestRequestedIPsParser(unittest.TestCase):
 
         # assert
         self.assertIsNone(result)
+
+    def test_parser_empty_private_ip_attribute(self):
+        # arrange
+        attributes = {'Private IP': ''}
+
+        # act
+        result = RequestedIPsParser.parse(attributes)
+
+        # assert
+        self.assertIsNone(result)
+
+    def test_parser_empty_private_ip_attribute_with_spaces(self):
+        # arrange
+        attributes = {'Private IP': '    '}
+
+        # act
+        result = RequestedIPsParser.parse(attributes)
+
+        # assert
+        self.assertIsNone(result)
