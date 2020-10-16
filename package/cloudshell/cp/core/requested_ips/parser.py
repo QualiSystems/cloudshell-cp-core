@@ -19,7 +19,7 @@ class RequestedIPsParser:
         :return: List[List[str]] - Each item in the list represents the IP addresses per specific nic.
         """
         ips_request_string = RequestedIPsParser._get_private_ip_attribute_value(attributes)
-        if not ips_request_string:
+        if not ips_request_string or not ips_request_string.strip():
             return None
 
         requested_ips = []

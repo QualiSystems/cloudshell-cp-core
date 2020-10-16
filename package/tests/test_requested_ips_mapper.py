@@ -1,6 +1,6 @@
 import unittest
 
-from mock import Mock
+from mock import Mock, MagicMock
 
 from cloudshell.cp.core.requested_ips.mapper import RequestedIPsMapper
 
@@ -50,4 +50,14 @@ class TestRequestedIPsMapper(unittest.TestCase):
         with self.assertRaisesRegexp(ValueError, 'outside of network 10.0.0.0/28'):
             mapper.map_network_to_requested_ips(network_actions)
 
+    def test__map_network_to_requested_ips_empty_requested_ips(self):
+        # arrange
+        requested_ips_list = None
+        network_actions = MagicMock()
+        mapper = RequestedIPsMapper(requested_ips_list)
 
+        # act
+        result = mapper.map_network_to_requested_ips(network_actions)
+
+        # assert
+        self.assertEqual(result, {})
