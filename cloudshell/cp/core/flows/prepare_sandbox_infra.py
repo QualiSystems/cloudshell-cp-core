@@ -1,4 +1,4 @@
-import concurrent
+import concurrent.futures
 from abc import ABC, abstractmethod
 
 from cloudshell.cp.core.request_actions import DriverResponse
