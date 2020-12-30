@@ -5,6 +5,7 @@ from cloudshell.cp.core.models import *
 from cloudshell.cp.core.utils import *
 import json
 
+
 class TestCloudShellCpCore(TestCase):
 
     def test_custom_deployment_model(self):
@@ -30,7 +31,6 @@ class TestCloudShellCpCore(TestCase):
         self.assertTrue(action.actionParams.deployment.customModel.auto_power_off, 'True')
 
     def test_custom_deployment_model_slicker(self):
-
         # prepare
         class CustomModel(object):
             __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
@@ -38,7 +38,6 @@ class TestCloudShellCpCore(TestCase):
             def __init__(self, attributes):
                 self.auto_power_off = False
                 self.autoload = ''
-
 
                 for k, v in attributes.items():
                     try_set_attr(self, to_snake_case(k), v)
@@ -56,7 +55,6 @@ class TestCloudShellCpCore(TestCase):
         self.assertEqual(action.actionParams.deployment.customModel.autoload, 'True')
         self.assertEqual(action.actionParams.deployment.customModel.auto_power_off, True)
 
-
     def test_deploy_app_action(self):
         # prepare
         json_req = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes":[{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attribute"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attribute"},{"attributeName":"VM Cluster","attributeValue":"","type":"attribute"},{"attributeName":"VM Storage","attributeValue":"","type":"attribute"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attribute"},{"attributeName":"VM Location","attributeValue":"","type":"attribute"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attribute"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attribute"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attribute"},{"attributeName":"Auto Delete","attributeValue":"True","type":"attribute"},{"attributeName":"Autoload","attributeValue":"True","type":"attribute"},{"attributeName":"IP Regex","attributeValue":"","type":"attribute"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attribute"}],"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attribute"},{"attributeName":"Public IP","attributeValue":"","type":"attribute"},{"attributeName":"User","attributeValue":"","type":"attribute"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"ad3561c1-45a5-445a-9b5f-4021879a0b0c","type":"deployApp"}]}}'
@@ -71,7 +69,6 @@ class TestCloudShellCpCore(TestCase):
         self.assertEqual(deploy_action.actionParams.deployment.deploymentPath, "VCenter Deploy VM From Linked Clone")
         self.assertEqual(deploy_action.actionParams.deployment.attributes["vCenter VM Snapshot"], "1")
 
-
     def test_prepare_connectivity_action(self):
         # prepare
         json_req = '{"driverRequest":{"actions":[{"actionParams":{"cidr":"10.0.1.0/24","type":"prepareCloudInfraParams"},"actionId":"36af5bbf-c9b4-4e5d-b84b-9ea513c7defd","type":"prepareCloudInfra"},{"actionParams":{"isPublic":true,"cidr":"10.0.1.0/24","alias":"DefaultSubnet","subnetServiceAttributes":null,"type":"prepareSubnetParams"},"actionTarget":{"fullName":null,"fullAddress":null,"type":"actionTarget"},"actionId":"0480fa41-f50b-42d6-9c0d-5518875f1176","type":"prepareSubnet"}]}}'
@@ -81,13 +78,13 @@ class TestCloudShellCpCore(TestCase):
         parser = DriverRequestParser()
         actions = parser.convert_driver_request_to_actions(req)
         self.assertEqual(len(actions), 2)
-        prepare_cloud_infra = single(actions,lambda x: isinstance(x,PrepareCloudInfra))
+        prepare_cloud_infra = single(actions, lambda x: isinstance(x, PrepareCloudInfra))
 
         # assert
         self.assertEqual(prepare_cloud_infra.actionId, '36af5bbf-c9b4-4e5d-b84b-9ea513c7defd')
         self.assertEqual(prepare_cloud_infra.actionParams.cidr, '10.0.1.0/24')
 
-        prepare_subnet = single(actions,lambda x: isinstance(x,PrepareSubnet ))
+        prepare_subnet = single(actions, lambda x: isinstance(x, PrepareSubnet))
 
         self.assertEqual(prepare_subnet.actionParams.alias, 'DefaultSubnet')
         self.assertEqual(prepare_subnet.actionParams.isPublic, True)
@@ -121,8 +118,6 @@ class TestCloudShellCpCore(TestCase):
         # assert
         self.assertIsInstance(remove_vlan_actions[0], SetVlan)
 
-
-
     def test_parse_json_serialized_request(self):
         # prepare
         json_req = '{"driverRequest":{"actions":[{"actionParams":{"appName":"vCenter_CVC_Support","deployment":{"deploymentPath":"VCenter Deploy VM From Linked Clone","attributes":[{"attributeName":"vCenter VM","attributeValue":"Tor/Temps/ImageMonoNew","type":"attribute"},{"attributeName":"vCenter VM Snapshot","attributeValue":"1","type":"attribute"},{"attributeName":"VM Cluster","attributeValue":"","type":"attribute"},{"attributeName":"VM Storage","attributeValue":"","type":"attribute"},{"attributeName":"VM Resource Pool","attributeValue":"","type":"attribute"},{"attributeName":"VM Location","attributeValue":"","type":"attribute"},{"attributeName":"Auto Power On","attributeValue":"True","type":"attribute"},{"attributeName":"Auto Power Off","attributeValue":"True","type":"attribute"},{"attributeName":"Wait for IP","attributeValue":"True","type":"attribute"},{"attributeName":"Auto Delete","attributeValue":"True","type":"attribute"},{"attributeName":"Autoload","attributeValue":"True","type":"attribute"},{"attributeName":"IP Regex","attributeValue":"","type":"attribute"},{"attributeName":"Refresh IP Timeout","attributeValue":"600","type":"attribute"}],"type":"deployAppDeploymentInfo"},"appResource":{"attributes":[{"attributeName":"Password","attributeValue":"3M3u7nkDzxWb0aJ/IZYeWw==","type":"attribute"},{"attributeName":"Public IP","attributeValue":"","type":"attribute"},{"attributeName":"User","attributeValue":"","type":"attribute"}],"type":"appResourceInfo"},"type":"deployAppParams"},"actionId":"ad3561c1-45a5-445a-9b5f-4021879a0b0c","type":"deployApp"}]}}'
@@ -136,7 +131,6 @@ class TestCloudShellCpCore(TestCase):
         self.assertEqual(actions[0].actionParams.appName, 'vCenter_CVC_Support')
 
     def test_try_set_attr(self):
-
         class CustomModel(object):
             __deploymentModel__ = "VCenter Deploy VM From Linked Clone"
 
