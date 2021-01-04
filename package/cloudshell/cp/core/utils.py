@@ -76,7 +76,7 @@ def convert_attributes_list_to_dict(attributes):
 def convert_dict_to_attributes_list(attributes_dict):
     attributes = []
 
-    for k, v in attributes_dict.iteritems():
+    for k, v in attributes_dict.items():
         attributes.append(Attribute(k, v))
 
     return attributes
