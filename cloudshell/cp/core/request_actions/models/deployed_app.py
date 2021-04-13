@@ -40,15 +40,13 @@ class DeployedApp:
     _password: str = None
 
     def __post_init__(self):
-        if all(
-            [
-                self.family == self.GENERIC_APP_FAMILY,
-                self.model == self.GENERIC_APP_MODEL,
-            ]
-        ):
-            self._namespace = ""
-        else:
-            self._namespace = f"{self.model}."
+        try:
+            namespace = ""
+            _ = self.attributes[f"{namespace}User"]
+        except KeyError:
+            namespace = f"{self.model}."
+            _ = self.attributes[f"{namespace}User"]
+        self._namespace = namespace
 
     def update_public_ip(self, public_ip):
         """Update Public IP Attribute on the CloudShell.
