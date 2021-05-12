@@ -121,6 +121,7 @@ class PrepareSubnetParams(RequestObjectBase):
         self.isPublic = True  # type: bool
         self.alias = ''  # type: str
         self.subnetServiceAttributes = None  # type: dict
+        self.connectToVpn = True  # type: bool
 
 
 # endregion
