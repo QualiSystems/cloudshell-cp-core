@@ -427,7 +427,7 @@ class SetAppSecurityGroupActionResult(ActionResultBase):
 
 class SaveAppResult(ActionResultBase):
     def __init__(self, actionId='', success=True, infoMessage='', errorMessage='', artifacts=None,
-                 savedEntityAttributes=None, additionalData=None):
+                 savedEntityAttributes=None, additionalData=None, saveDeploymentModel=""):
         """
         :param artifacts: list[Artifact]
         :param savedEntityAttributes: list[Attribute]
@@ -437,6 +437,7 @@ class SaveAppResult(ActionResultBase):
         self.artifacts = artifacts or []  # type: list[Artifact]
         self.savedEntityAttributes = savedEntityAttributes or []
         self.additionalData = additionalData or []
+        self.saveDeploymentModel = saveDeploymentModel
 
 
 class SetVlanResult(ActionResultBase):
