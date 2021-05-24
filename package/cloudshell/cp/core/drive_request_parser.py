@@ -33,7 +33,7 @@ class DriverRequestParser:
 
         req_actions = driver_request['driverRequest'].get('actions')
 
-        if (req_actions == None):
+        if req_actions is None:
             return None
 
         actions_result = []
@@ -46,16 +46,16 @@ class DriverRequestParser:
                 actions_result.append(created_action)
 
             except Exception as e:
-                print (e.message)
-                print ('no class named ' + class_name)
+                print(str(e))
+                print('no class named ' + class_name)
                 pass
 
-        return  actions_result
+        return actions_result
 
     def _create_object_of_type(self, source):
         t = source.get('type')
 
-        if (t == None):
+        if t is None:
             raise ValueError('source has no "type" property')
 
         t = first_letter_to_upper(t)
