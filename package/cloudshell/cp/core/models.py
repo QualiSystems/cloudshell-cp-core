@@ -1,3 +1,6 @@
+import json
+
+
 from cloudshell.cp.core.requested_ips.parser import RequestedIPsParser
 
 
@@ -10,9 +13,6 @@ class Printable:
 
 
 # region base
-import json
-
-
 class RequestObjectBase(Printable):
     def __init__(self):
         pass
@@ -97,8 +97,8 @@ class AppResourceInfo(RequestObjectBase):
 
 # endregion
 
-# region CreateKeys
 
+# region CreateKeys
 class CreateKeys(RequestActionBase):
     def __init__(self):
         RequestActionBase.__init__(self)
@@ -121,6 +121,7 @@ class PrepareSubnetParams(RequestObjectBase):
         self.isPublic = True  # type: bool
         self.alias = ''  # type: str
         self.subnetServiceAttributes = None  # type: dict
+        self.connectToVpn = True  # type: bool
 
 
 # endregion
