@@ -20,5 +20,18 @@ class PrepareSubnet(BaseConnectivityAction):
     def get_cidr(self):
         return self.actionParams.cidr
 
+    def get_alias(self):
+        return self.actionParams.alias
+
+    def get_attribute(self, name):
+        return next(
+            (
+                attr.attributeValue
+                for attr in self.actionParams.subnetServiceAttributes or []
+                if attr.attributeName == name
+            ),
+            None,
+        )
+
     def is_private(self):
         return not self.actionParams.isPublic
