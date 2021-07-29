@@ -80,10 +80,10 @@ class DeployApp(BaseRequestAction):
     @property
     def password(self):
         if self._password is None:
-            self._password = self._decrypt_password(
-                password=self._get_app_resource_attribute("Password")
-            )
-
+            password = self._get_app_resource_attribute("Password")
+            if password:
+                password = self._decrypt_password(password=password)
+            self._password = password
         return self._password
 
     @property
