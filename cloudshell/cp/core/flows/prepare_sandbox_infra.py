@@ -121,4 +121,6 @@ class AbstractPrepareSandboxInfraFlow(ABC):
                 *prepare_subnets_task.result(),
             ]
 
-        return DriverResponse(action_results).to_driver_response_json()
+        json_data = DriverResponse(action_results).to_driver_response_json()
+        self._logger.debug(f"Prepare sandbox infra details: {json_data}")
+        return json_data

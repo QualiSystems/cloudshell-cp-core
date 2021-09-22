@@ -46,4 +46,6 @@ class AbstractAppSecurityGroupsFlow(ABC):
 
             results.append(set_group_result)
 
-        return jsonpickle.encode(results)
+        json_data = jsonpickle.encode(results)
+        self._logger.debug(f"Set App Security Group details: {json_data}")
+        return json_data

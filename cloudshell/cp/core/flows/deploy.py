@@ -43,6 +43,8 @@ class AbstractDeployFlow(ABC):
             request_actions=request_actions
         )
 
-        return DriverResponse(
+        json_data = DriverResponse(
             [deploy_app_result, *connect_to_subnet_results]
         ).to_driver_response_json()
+        self._logger.debug(f"Deploy details: {json_data}")
+        return json_data
