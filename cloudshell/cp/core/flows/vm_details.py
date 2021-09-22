@@ -32,4 +32,6 @@ class AbstractVMDetailsFlow(ABC):
             vm_details_data = self._get_vm_details(deployed_app=deployed_app)
             results.append(vm_details_data)
 
-        return jsonpickle.encode(results, unpicklable=False)
+        json_data = jsonpickle.encode(results, unpicklable=False)
+        self._logger.debug(f"VM details: {json_data}")
+        return json_data
