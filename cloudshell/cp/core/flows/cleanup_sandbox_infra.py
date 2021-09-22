@@ -42,4 +42,8 @@ class AbstractCleanupSandboxInfraFlow(ABC):
             request_actions=request_actions
         )
 
-        return DriverResponse([cleanup_sandbox_infra_result]).to_driver_response_json()
+        json_data = DriverResponse(
+            [cleanup_sandbox_infra_result]
+        ).to_driver_response_json()
+        self._logger.debug(f"Cleanup sandbox infra details: {json_data}")
+        return json_data
