@@ -61,6 +61,7 @@ class DeployedApp:
         )
 
     def update_private_ip(self, resource_name: str, private_ip: str):
+        # todo use self.name, we don't need attr resource_name
         self.cs_api.UpdateResourceAddress(resource_name, private_ip)
 
     @property

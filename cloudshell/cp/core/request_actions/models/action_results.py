@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 
-from .base import BaseRequestAction, BaseRequestObject
+from .base import BaseRequestAction, BaseRequestObject, Attribute
 
 
 @dataclass
@@ -74,8 +76,8 @@ class CreateKeysActionResult(BaseActionResult):
 
 @dataclass
 class SaveAppResult(BaseActionResult):
-    artifacts: list = field(default_factory=list)
-    savedEntityAttributes: list = field(default_factory=list)
+    artifacts: list[Artifact] = field(default_factory=list)
+    savedEntityAttributes: list[Attribute] = field(default_factory=list)
     additionalData: list = field(default_factory=list)
 
 
