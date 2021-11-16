@@ -16,6 +16,9 @@ def generate_name(
     :return: (str) generated name
     """
     # replace special characters. Remove dash character only if at the beginning.
+    if len(postfix) >= max_length:
+        raise ValueError(f"Postfix '{postfix}' is bigger than name length {max_length}")
+
     name = re.sub("[^a-zA-Z0-9-]|^-+", "", name)
 
     if postfix is None:
