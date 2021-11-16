@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .base import BaseRequestAction, BaseRequestObject, Attribute
+from .base import Attribute, BaseRequestAction, BaseRequestObject
 
 
 @dataclass
@@ -34,7 +34,7 @@ class DeployAppResult(BaseActionResult):
 
 
 @dataclass
-class VmDetailsProperty(object):
+class VmDetailsProperty:
     key: str = ""
     value: str = ""
     hidden: bool = False
