@@ -4,9 +4,7 @@ import re
 import uuid
 
 
-def generate_name(
-    name: str, postfix: str | None = None, max_length: int = 24
-) -> str:
+def generate_name(name: str, postfix: str | None = None, max_length: int = 24) -> str:
     """Generate name based on the given one with a maximum allowed length.
 
     Will replace all special characters (some Azure resources have this requirements).

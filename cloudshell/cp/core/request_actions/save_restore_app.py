@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from cloudshell.cp.core.request_actions.base import BaseRequestActions
-from cloudshell.cp.core.request_actions.models import SaveApp, DeleteSavedApp
+from cloudshell.cp.core.request_actions.models import DeleteSavedApp, SaveApp
 
 
 @dataclass
