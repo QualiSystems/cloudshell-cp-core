@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 
-from .base import BaseRequestAction, BaseRequestObject
+from . import Artifact, BaseRequestAction, BaseRequestObject, Attribute
 
 
 @dataclass
@@ -9,7 +11,7 @@ class SaveAppParams(BaseRequestObject):
     savedSandboxId: str = ""
     sourceVmUuid: str = ""
     sourceAppName: str = ""
-    deploymentPathAttributes: list = field(default_factory=list)
+    deploymentPathAttributes: list[Attribute] = field(default_factory=list)
 
 
 @dataclass
@@ -21,7 +23,7 @@ class SaveApp(BaseRequestAction):
 class DeleteSavedAppParams(BaseRequestObject):
     saveDeploymentModel: str = ""
     savedSandboxId: str = ""
-    artifacts: list = field(default_factory=list)
+    artifacts: list[Artifact] = field(default_factory=list)
     savedAppName: str = ""
 
 
