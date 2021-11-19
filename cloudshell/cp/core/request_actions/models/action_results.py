@@ -79,6 +79,7 @@ class SaveAppResult(BaseActionResult):
     type: str = "SaveApp"
     artifacts: list[Artifact] = field(default_factory=list)
     savedEntityAttributes: list[Attribute] = field(default_factory=list)
+    saveDeploymentModel: str = ""
     additionalData: list = field(default_factory=list)
 
 
