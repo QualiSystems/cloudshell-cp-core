@@ -76,9 +76,15 @@ class CreateKeysActionResult(BaseActionResult):
 
 @dataclass
 class SaveAppResult(BaseActionResult):
+    type: str = "SaveApp"
     artifacts: list[Artifact] = field(default_factory=list)
     savedEntityAttributes: list[Attribute] = field(default_factory=list)
     additionalData: list = field(default_factory=list)
+
+
+@dataclass
+class DeleteSavedAppResult(BaseActionResult):
+    type: str = "DeleteSavedApp"
 
 
 @dataclass
