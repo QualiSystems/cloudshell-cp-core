@@ -125,3 +125,8 @@ class Artifact(BaseRequestObject):
 class DataElement:
     name: str
     value: str
+
+
+@dataclass
+class ValidateAttributesResponse(BaseActionResult):
+    type: str = "ValidateAttributes"
