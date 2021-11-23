@@ -9,3 +9,4 @@ from .prepare_cloud_infra import *  # noqa
 from .prepare_subnet import *  # noqa
 from .save_restore_app import *  # noqa
 from .traffic_mirroring import *  # noqa
+from .validate_attributes import ValidateAttributes  # noqa
