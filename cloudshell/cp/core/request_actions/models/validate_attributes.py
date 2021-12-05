@@ -18,7 +18,7 @@ class ValidateAttributes(BaseRequestAction):
         # fixme why attributes are different from usual?
         attrs = {a["AttributeName"]: a["AttributeValue"] for a in request["Attributes"]}
         return cls(
-            actionId=request["actionId"],
+            actionId=request["ActionId"],
             deployment_path=request["DeploymentPath"],
             attributes=attrs,
         )
