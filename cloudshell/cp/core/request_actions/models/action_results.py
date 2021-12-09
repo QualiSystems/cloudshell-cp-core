@@ -76,7 +76,7 @@ class CreateKeysActionResult(BaseActionResult):
 
 @dataclass
 class SaveAppResult(BaseActionResult):
-    type: str = "SaveApp"
+    type: str = "SaveApp"  # noqa: A003
     artifacts: list[Artifact] = field(default_factory=list)
     savedEntityAttributes: list[Attribute] = field(default_factory=list)
     saveDeploymentModel: str = ""
@@ -85,7 +85,7 @@ class SaveAppResult(BaseActionResult):
 
 @dataclass
 class DeleteSavedAppResult(BaseActionResult):
-    type: str = "DeleteSavedApp"
+    type: str = "DeleteSavedApp"  # noqa: A003
 
 
 @dataclass
@@ -129,4 +129,4 @@ class DataElement:
 
 @dataclass
 class ValidateAttributesResponse(BaseActionResult):
-    type: str = "ValidateAttributes"
+    type: str = "ValidateAttributes"  # noqa: A003
