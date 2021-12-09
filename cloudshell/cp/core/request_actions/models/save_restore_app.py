@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from . import Artifact, BaseRequestAction, BaseRequestObject, Attribute
+from . import Artifact, Attribute, BaseRequestAction, BaseRequestObject
 
 
 @dataclass
