@@ -1,6 +1,3 @@
-#!/usr/bin/python
-
-
 class BaseTagsManager:
     class DefaultTagNames:
         created_by = "CreatedBy"
