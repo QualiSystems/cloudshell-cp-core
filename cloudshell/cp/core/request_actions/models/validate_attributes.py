@@ -15,7 +15,6 @@ class ValidateAttributes(BaseRequestAction):
     @classmethod
     def from_request(cls, request: str) -> ValidateAttributes:
         request = jsonpickle.decode(request)
-        # fixme why attributes are different from usual?
         attrs = {a["AttributeName"]: a["AttributeValue"] for a in request["Attributes"]}
         return cls(
             actionId=request["ActionId"],
