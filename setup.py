@@ -20,7 +20,6 @@ setup(
     install_requires=required,
     python_requires="~=3.7",
     tests_require=required_for_tests,
-    test_suite="nose.collector",
     version=version_from_file,
     description=(
         "A repository for projects providing out of the box capabilities within "
