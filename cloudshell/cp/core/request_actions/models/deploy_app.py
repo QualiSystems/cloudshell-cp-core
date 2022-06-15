@@ -26,6 +26,7 @@ class DeployAppParams(BaseRequestObject):
 @dataclass
 class DeployApp(BaseRequestAction):
     DEPLOYMENT_PATH = ""
+    _DO_NOT_EDIT_APP_NAME = False
 
     actionParams: DeployAppParams = None
     attributes: dict = field(default_factory=dict)
@@ -71,7 +72,11 @@ class DeployApp(BaseRequestAction):
 
     @property
     def app_name(self) -> str:
-        return self.actionParams.appName.lower().replace(" ", "-")
+        if self._DO_NOT_EDIT_APP_NAME:  # todo make it default in the new major version
+            name = self.actionParams.appName
+        else:
+            name = self.actionParams.appName.lower().replace(" ", "-")
+        return name
 
     @property
     def user(self):
