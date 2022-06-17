@@ -6,7 +6,8 @@ import uuid
 import attr
 
 CS_MAX_NAME_LENGTH = 100
-CS_PATTER_REMOVE_SYMBOLS = re.compile(re.escape(".-|_[]"))
+CS_ALLOWED_SYMBOLS = re.escape(".-|_[]")
+CS_PATTER_REMOVE_SYMBOLS = re.compile(rf"[^\w\d\s{CS_ALLOWED_SYMBOLS}]")
 
 
 def generate_name(name: str, postfix: str | None = None, max_length: int = 24) -> str:
