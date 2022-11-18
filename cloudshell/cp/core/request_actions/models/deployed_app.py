@@ -1,4 +1,8 @@
 from dataclasses import dataclass, field
+try:
+    from cached_property import cached_property
+except ImportError:
+    from functools import cached_property
 
 
 @dataclass
@@ -39,14 +43,15 @@ class DeployedApp:
     cs_api: "cloudshell.api.cloudshell_api.CloudShellAPISession" = None  # noqa: F821
     _password: str = None
 
-    def __post_init__(self):
+    @cached_property
+    def _namespace(self):
         try:
             namespace = ""
             _ = self.attributes[f"{namespace}User"]
         except KeyError:
             namespace = f"{self.model}."
             _ = self.attributes[f"{namespace}User"]
-        self._namespace = namespace
+        return namespace
 
     def update_public_ip(self, public_ip):
         """Update Public IP Attribute on the CloudShell.
