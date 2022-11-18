@@ -1,3 +1,4 @@
 pytest~=6.2
 pytest-cov~=2.11
+freezegun
 cloudshell-shell-core~=5.0
