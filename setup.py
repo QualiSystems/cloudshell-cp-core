@@ -21,6 +21,12 @@ setup(
     python_requires="~=3.7",
     tests_require=required_for_tests,
     version=version_from_file,
+    long_description=(
+        "A repository for projects providing out of the box capabilities within "
+        "CloudShell to parse and convert cloudShell driver request to well defined "
+        "python objects. One cloudshell-cp-core For All cloudshell cloud provider "
+        "shells."
+    ),
     description=(
         "A repository for projects providing out of the box capabilities within "
         "CloudShell to parse and convert cloudShell driver request to well defined "
