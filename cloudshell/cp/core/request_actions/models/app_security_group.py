@@ -21,11 +21,16 @@ class AppSecurityGroup:
         deployed_app_data = data["deployedApp"]
         vm_details_data = deployed_app_data.get("vmdetails")
 
+        attributes = {
+            attr["name"]: attr["value"]
+            for attr in deployed_app_data.get("attributes", {})
+        }
+
         deployed_app = DeployedApp(
             name=deployed_app_data.get("name"),
             deployment_service_model="",
             private_ip=deployed_app_data.get("address"),
-            attributes=deployed_app_data.get("attributes", []),
+            attributes=attributes,
         )
 
         if vm_details_data is not None:
