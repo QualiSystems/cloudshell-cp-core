@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 try:
     from cached_property import cached_property
 except ImportError:
